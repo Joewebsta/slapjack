@@ -1,13 +1,12 @@
 class Game {
 
-  constructor(cards) {
+  constructor(player1, player2, cards) {
+    this.player1 = player1;
+    this.player2 = player2;
     this.cards = cards;
-    
-    console.log('Game created!')
-    // 2 players
-    // Afray of all possible cards?
-    // Central pile of cards
-    // Player's whose current turn it is
+    this.centralPile = [];
+    this.currentPlayerTurn = [this.player1];
+    console.log('Game created!');
   }
   
   shuffleCards(cards) {
