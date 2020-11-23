@@ -19,6 +19,11 @@ class Game {
 
     return shuffledCards;
   }
+
+  dealPlayerDecks() {
+    this.player1.hand = this.cards.slice(0, 26);
+    this.player2.hand = this.cards.slice(27, 52);
+  }
 }
 
 

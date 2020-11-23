@@ -1,5 +1,3 @@
-window.addEventListener('load', initializeGame);
-
 function initializeGame() {
   const cards = createCards();
   const player1 = new Player('Player 1');
@@ -7,9 +5,8 @@ function initializeGame() {
   const game = new Game(player1, player2, cards);
   
   game.cards = game.shuffleCards(game.cards);
-  // game.dealPlayerDecks();
-  
-  console.log(game);
+  game.dealPlayerDecks();
+  return game;
 }
 
 function createCards() {
@@ -21,3 +18,6 @@ function createCards() {
     return cardArr;
   }, []);
 }
+
+const game = initializeGame();
+console.log(game);
