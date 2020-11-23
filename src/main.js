@@ -1,3 +1,6 @@
+const game = initializeGame();
+
+
 function initializeGame() {
   const cards = createCards();
   const player1 = new Player('Player 1');
@@ -19,5 +22,6 @@ function createCards() {
   }, []);
 }
 
-const game = initializeGame();
-console.log(game);
+window.addEventListener('keypress', function(e) {
+  game.handlePlayerActions(e);
+}.bind(game), false);
