@@ -1,7 +1,9 @@
 window.addEventListener('load', initializeGame);
 
 function initializeGame() {
-  new Game(createCards());
+  const game = new Game(createCards());
+  const shuffledCards = game.shuffleCards(game.cards);
+  console.log(shuffledCards);
 }
 
 function createCards() {

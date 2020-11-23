@@ -1,12 +1,24 @@
 class Game {
 
   constructor(cards) {
+    this.cards = cards;
+    
     console.log('Game created!')
-    console.log(cards);
     // 2 players
     // Afray of all possible cards?
     // Central pile of cards
     // Player's whose current turn it is
+  }
+  
+  shuffleCards(cards) {
+    const shuffledCards = [];
+    while (cards.length) {
+      const randIdx = Math.round(Math.random() * (cards.length - 1));
+      shuffledCards.push(cards[randIdx]);
+      cards.splice(randIdx, 1);
+    }
+
+    return shuffledCards;
   }
 }
 
