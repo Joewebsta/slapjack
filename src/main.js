@@ -1,9 +1,15 @@
 window.addEventListener('load', initializeGame);
 
 function initializeGame() {
-  const game = new Game(createCards());
-  const shuffledCards = game.shuffleCards(game.cards);
-  console.log(shuffledCards);
+  const cards = createCards();
+  const player1 = new Player('Player 1');
+  const player2 = new Player('Player 2');
+  const game = new Game(player1, player2, cards);
+  
+  game.cards = game.shuffleCards(game.cards);
+  // game.dealPlayerDecks();
+  
+  console.log(game);
 }
 
 function createCards() {
