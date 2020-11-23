@@ -1,6 +1,8 @@
 class Game {
 
-  constructor() {
+  constructor(cards) {
+    console.log('Game created!')
+    console.log(cards);
     // 2 players
     // Afray of all possible cards?
     // Central pile of cards
