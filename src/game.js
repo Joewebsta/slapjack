@@ -39,21 +39,21 @@ class Game {
       this.centralPile.unshift(this.player1.playCard());
       this.currentPlayerTurn = this.player2;
       this.player1.lastAction = 'deal';
-      console.log(this.centralPile[0].suit);
+      console.log(this.centralPile[0].value);
     }
 
     if (e.key === 'p' && this.currentPlayerTurn === this.player2) {
       this.centralPile.unshift(this.player2.playCard());
       this.currentPlayerTurn = this.player1;
       this.player2.lastAction = 'deal';
-      console.log(this.centralPile[0].suit);
+      console.log(this.centralPile[0].value);
     }
   }
 
   slapCard(e) {
     if ((e.key === 'f' || e.key === 'j') && !this.centralPile.length) return;
 
-    if (this.isJack()) { //OR isDouble OR isSandwich
+    if (this.isJack() || this.isDouble() || this.isSandwich()) {
       this.legalSlap(e);
     } else {
       this.illegalSlap(e);
@@ -61,7 +61,15 @@ class Game {
   }
 
   isJack() {
-    return this.centralPile[0].suit === 'jack';
+    return this.centralPile[0].value === 'jack';
+  }
+
+  isDouble() {
+    return this.centralPile[0].value === this.centralPile[1].value;
+  }
+
+  isSandwich() {
+
   }
 
   legalSlap(e) {
