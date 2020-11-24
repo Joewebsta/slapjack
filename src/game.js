@@ -24,7 +24,7 @@ class Game {
     this.player2.hand = this.cards.slice(26, 52);
   }
 
-  handlePlayerActions(e) {
+  handlePlayerActions(e) {  
     if (e.key === 'q' || e.key === 'p') {
       this.dealCard(e);
     }
@@ -38,12 +38,14 @@ class Game {
     if (e.key === 'q' && this.currentPlayerTurn === this.player1) {
       this.centralPile.unshift(this.player1.playCard());
       this.currentPlayerTurn = this.player2;
+      this.player1.lastAction = 'deal';
       console.log(this.centralPile[0].suit);
     }
 
     if (e.key === 'p' && this.currentPlayerTurn === this.player2) {
       this.centralPile.unshift(this.player2.playCard());
       this.currentPlayerTurn = this.player1;
+      this.player2.lastAction = 'deal';
       console.log(this.centralPile[0].suit);
     }
   }
@@ -63,28 +65,33 @@ class Game {
       this.player1.hand = this.player1.hand.concat(this.centralPile);
       this.player1.hand = this.shuffleCards(this.player1.hand);
       this.currentPlayerTurn = this.player1;
+      console.log('Player 1 succesful slap!');
     }
     
     if (e.key == 'j') {
       this.player2.hand = this.player2.hand.concat(this.centralPile);
       this.player2.hand = this.shuffleCards(this.player2.hand);
       this.currentPlayerTurn = this.player2;
+      console.log('Player 2 succesful slap!');
     }
     
     this.centralPile = [];
   }
 
   illegalSlap(e) {
+    if (this.player1.lastAction === 'illegal' || this.player2.lastAction === 'illegal') return;
     console.log('Illegal slap!');
 
     if (e.key === 'f') {
       this.player2.hand.push(this.player1.hand.shift());
       this.currentPlayerTurn = this.player2;
+      this.player1.lastAction = 'illegal';
     }
     
     if (e.key === 'j') {
       this.player1.hand.push(this.player2.hand.shift());
       this.currentPlayerTurn = this.player1;
+      this.player2.lastAction = 'illegal';
     }
   }
 }
