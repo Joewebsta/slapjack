@@ -1,6 +1,5 @@
 const game = initializeGame();
 
-
 function initializeGame() {
   const cards = createCards();
   const player1 = new Player('Player 1');

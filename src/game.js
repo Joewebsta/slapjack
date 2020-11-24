@@ -25,7 +25,13 @@ class Game {
   }
 
   handlePlayerActions(e) {
-    if (e.key === 'q' || e.key === 'p') this.dealCard(e);
+    if (e.key === 'q' || e.key === 'p') {
+      this.dealCard(e);
+    }
+    
+    if (e.key === 'f' || e.key === 'j') {
+      this.slapCard(e);
+    }
   }
 
   dealCard(e) {
@@ -41,6 +47,34 @@ class Game {
       console.log(this.centralPile[0].suit);
     }
   }
-}
 
-// Player slaps card
+  slapCard(e) {
+    if ((e.key === 'f' || e.key === 'j') && !this.centralPile.length) return;
+
+    if (this.centralPile[0].suit === 'jack') { //OR isDouble OR isSandwich
+      this.legalSlap(e);
+    } else {
+      this.illegalSlap(e);
+    }
+  }
+
+  legalSlap(e) {
+    if (e.key == 'f') {
+      this.player1.hand = this.player1.hand.concat(this.centralPile);
+      this.player1.hand = this.shuffleCards(this.player1.hand);
+      this.currentPlayerTurn = this.player1;
+    }
+    
+    if (e.key == 'j') {
+      this.player2.hand = this.player2.hand.concat(this.centralPile);
+      this.player2.hand = this.shuffleCards(this.player2.hand);
+      this.currentPlayerTurn = this.player2;
+    }
+    
+    this.centralPile = [];
+  }
+
+  illegalSlap() {
+    console.log('Illegal slap!');
+  }
+}
