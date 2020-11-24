@@ -21,7 +21,7 @@ class Game {
 
   dealPlayerDecks() {
     const midCardIdx = (this.cards.length / 2);
-    const lastCardIdx = this.cards.length - 1;
+    const lastCardIdx = this.cards.length;
     this.player1.hand = this.cards.slice(0, midCardIdx);
     this.player2.hand = this.cards.slice(midCardIdx, lastCardIdx);
   }
@@ -37,6 +37,18 @@ class Game {
   }
 
   dealCard(e) {
+    if (e.key === 'q' && !this.player1.hand.length) {
+      console.log('Player 1 is out of cards!');
+      this.currentPlayerTurn = this.player2;
+      return;
+    }
+
+    if (e.key === 'p' && !this.player2.hand.length) {
+      console.log('Player 2 is out of cards!');
+      this.currentPlayerTurn = this.player1;
+      return;
+    }
+
     if (e.key === 'q' && this.currentPlayerTurn === this.player1) {
       this.centralPile.unshift(this.player1.playCard());
       this.currentPlayerTurn = this.player2;
