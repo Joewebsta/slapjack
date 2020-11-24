@@ -76,7 +76,21 @@ class Game {
   }
 
   slapCard(e) {
+    // Slapping not allowed immediately after a player claims the central pile. Must be a deal.
     if ((e.key === 'f' || e.key === 'j') && !this.centralPile.length) return;
+
+    if (e.key === 'j' && !this.player1.hand.length && this.isJack()) {
+      console.log('GAME OVER! PLAYER 1 LOSES');
+      return;
+    }
+    
+    if (e.key === 'f' && !this.player2.hand.length && this.isJack()) {
+      console.log('GAME OVER! PLAYER 2 LOSES');
+      return;
+    }
+
+    // Player 1 out of cards, player 1 slaps incorrectly (illegal, double or sandwich) = Game over
+    // Player 1 out of cards, player 1 slaps (JACK ONLY) = Game continues
 
     if (this.isJack() || this.isDouble() || this.isSandwich()) {
       this.legalSlap(e);
