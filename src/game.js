@@ -20,8 +20,10 @@ class Game {
   }
 
   dealPlayerDecks() {
-    this.player1.hand = this.cards.slice(0, 26);
-    this.player2.hand = this.cards.slice(26, 52);
+    const midCardIdx = (this.cards.length / 2);
+    const lastCardIdx = this.cards.length - 1;
+    this.player1.hand = this.cards.slice(0, midCardIdx);
+    this.player2.hand = this.cards.slice(midCardIdx, lastCardIdx);
   }
 
   handlePlayerActions(e) {  
@@ -65,11 +67,15 @@ class Game {
   }
 
   isDouble() {
-    return this.centralPile[0].value === this.centralPile[1].value;
+    if (this.centralPile.length >= 2) {
+      return this.centralPile[0].value === this.centralPile[1].value;
+    }
   }
 
   isSandwich() {
-
+    if (this.centralPile.length >= 3) {
+      return this.centralPile[0].value === this.centralPile[2].value;
+    }
   }
 
   legalSlap(e) {
