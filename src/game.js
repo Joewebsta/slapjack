@@ -74,7 +74,17 @@ class Game {
     this.centralPile = [];
   }
 
-  illegalSlap() {
+  illegalSlap(e) {
     console.log('Illegal slap!');
+
+    if (e.key === 'f') {
+      this.player2.hand.push(this.player1.hand.shift());
+      this.currentPlayerTurn = this.player2;
+    }
+    
+    if (e.key === 'j') {
+      this.player1.hand.push(this.player2.hand.shift());
+      this.currentPlayerTurn = this.player1;
+    }
   }
 }
