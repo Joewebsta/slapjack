@@ -53,11 +53,15 @@ class Game {
   slapCard(e) {
     if ((e.key === 'f' || e.key === 'j') && !this.centralPile.length) return;
 
-    if (this.centralPile[0].suit === 'jack') { //OR isDouble OR isSandwich
+    if (this.isJack()) { //OR isDouble OR isSandwich
       this.legalSlap(e);
     } else {
       this.illegalSlap(e);
     }
+  }
+
+  isJack() {
+    return this.centralPile[0].suit === 'jack';
   }
 
   legalSlap(e) {
