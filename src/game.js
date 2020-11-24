@@ -37,6 +37,7 @@ class Game {
   }
 
   dealCard(e) {
+    // Prevent players from dealing a card when their hand is empty.
     if (e.key === 'q' && !this.player1.hand.length) {
       console.log('Player 1 is out of cards!');
       this.currentPlayerTurn = this.player2;
@@ -49,6 +50,7 @@ class Game {
       return;
     }
 
+    // Deal a card and add it to central pile. Pass turn to opponent.
     if (e.key === 'q' && this.currentPlayerTurn === this.player1) {
       this.centralPile.unshift(this.player1.playCard());
       this.currentPlayerTurn = this.player2;
@@ -61,6 +63,15 @@ class Game {
       this.currentPlayerTurn = this.player1;
       this.player2.lastAction = 'deal';
       console.log(this.centralPile[0].value);
+    }
+
+    // Reclaim turn if opponenet is out of cards
+    if (e.key === 'q' && !this.player2.hand.length) {
+      this.currentPlayerTurn = this.player1;
+    }
+
+    if (e.key === 'p' && !this.player1.hand.length) {
+      this.currentPlayerTurn = this.player2;
     }
   }
 
