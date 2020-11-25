@@ -29,30 +29,29 @@ class Game {
   handlePlayerActions(e) {  
     // determine the player that attmepted to deal
     const activePlayer = this.activePlayer(e);
+    const opponent = this.playerOpponent(activePlayer);
     
     // If a player attempted to deal
     if (this.isPlayerDeal(e)) {
-      this.handlePlayerDeal(activePlayer);
+      this.handlePlayerDeal(activePlayer, opponent);
     }
     
     // If player attempted to slap
     if (this.isPlayerSlap(e)) {
-      this.handlePlayerSlap(activePlayer);
+      this.handlePlayerSlap(activePlayer, opponent);
     }
   }
 
-  handlePlayerDeal(activePlayer) {
+  handlePlayerDeal(activePlayer, opponent) {
     // STOP player if it's not their turn OR if they have no cards
     if (!activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
     if (!activePlayer.hasCards()) return;
 
     // active player deals a card
-    this.dealCard(activePlayer);
+    this.dealCard(activePlayer, opponent);
   }
 
-  dealCard(player) {
-    const opponent = this.playerOpponent(player);
-    
+  dealCard(player, opponent) {
     // Deal a card and add it to central pile.
     this.centralPile.unshift(player.playCard());
     console.log(this.centralPile[0].value);
@@ -62,41 +61,24 @@ class Game {
     this.switchPlayerTurn(player);
   }
 
-  handlePlayerSlap(activePlayer) {
-    console.log(activePlayer);
+  handlePlayerSlap(activePlayer, opponent) {
+    // Slapping not allowed immediately after a player claims the central pile. Must be a deal.
+    if (!this.centralPile.length) return;
+    
+    if (activePlayer.hasCards() && opponent.hasCards()) {
+      console.log('both have cards!');
+      if (this.isIllegalSlap()) {
+        console.log('Illegal slap!');
+      }
+    }
+  }
+
+  isIllegalSlap() {
+    return !this.isJack() && !this.isDouble() && !this.isSandwich();
   }
 
   slapCard(e) {
-    // Slapping not allowed immediately after a player claims the central pile. Must be a deal.
-    if ((e.key === 'f' || e.key === 'j') && !this.centralPile.length) return;
-
-    // Game should end if opponenet slaps card when player has no cards
-    if (e.key === 'f' && !this.player2.hand.length && this.isJack()) {
-      console.log('GAME OVER! PLAYER 2 LOSES');
-      return;
-    }
     
-    if (e.key === 'j' && !this.player1.hand.length && this.isJack()) { // USE exit() OR labels??
-      console.log('GAME OVER! PLAYER 1 LOSES');
-      return;
-    }
-
-    // Player 1 out of cards, player 1 slaps incorrectly (illegal, double or sandwich) = Game over
-    if (e.key === 'f' && !this.player2.hand.length && !this.isJack() && !this.isDouble() && !this.isSandwich()) {
-      console.log('GAME OVER! PLAYER 2 DID NOT SLAP A JACK TO REVIVE HIMSELF');
-      return;
-    }
-
-    if (e.key === 'j' && !this.player1.hand.length && !this.isJack() && !this.isDouble() && !this.isSandwich()) {
-      console.log('GAME OVER! PLAYER 1 DID NOT SLAP A JACK TO REVIVE HIMSELF');
-      return;
-    }
-
-    if (this.isJack() || this.isDouble() || this.isSandwich()) {
-      this.legalSlap(e);
-    } else {
-      this.illegalSlap(e);
-    }
   }
 
   isJack() {
