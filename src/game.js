@@ -27,14 +27,27 @@ class Game {
   }
 
   handlePlayerActions(e) {  
-    if (e.key === 'q' || e.key === 'p') {
-      this.dealCard(e);
-    }
+    // if (e.key === 'q' || e.key === 'p') {
+    //   this.dealCard(e);
+    // }
 
-    console.log(this.isPlayerDeal(e));
+    // console.log(this.isPlayerDeal(e));
 
+    // If a player attempted to deal
     if (this.isPlayerDeal(e)) {
+      // determine the player that attmepted to deal
+      const activePlayer = this.activePlayer(e);
       
+      // determine if it's their turn
+      if (!this.isActivePlayerTurn(activePlayer)) return;
+      
+      // deal card
+      // this.dealCard();
+      
+      console.log(`Player deal: ${this.isPlayerDeal(e)}`);
+      console.log(`Active player: ${activePlayer.name}`);
+      console.log(`Active player turn: ${this.isActivePlayerTurn(activePlayer)}`);
+      console.log('Deal a damn card already!');
     }
     
     if (e.key === 'f' || e.key === 'j') {
@@ -176,5 +189,9 @@ class Game {
   activePlayer(e) {
     if (e.key === 'q' || e.key === 'f') return this.player1;
     if (e.key === 'p' || e.key === 'j') return this.player2;
+  }
+
+  isActivePlayerTurn(player) {
+    return player === this.currentPlayerTurn;
   }
 }
