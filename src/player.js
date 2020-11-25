@@ -12,6 +12,14 @@ class Player {
     return this.hand.shift();
   }
 
+  isPlayerTurn(currentPlayerTurn) {
+    return this === currentPlayerTurn;
+  }
+
+  hasCards() {
+    return this.hand.length;
+  }
+
   saveWinsToStorage() {
 
   }
