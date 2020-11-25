@@ -42,7 +42,7 @@ class Game {
       if (!this.isActivePlayerTurn(activePlayer) || !this.playerHasCards(activePlayer)) return;
       
       // active player deals a card
-      // this.dealCard();
+      this.dealCard(activePlayer);
       
       // IF OPPONENT HAS NO CARDS, RECLAIM TURN
       
@@ -58,43 +58,22 @@ class Game {
     }
   }
 
-  dealCard(e) {
-    // Prevent players from dealing a card when their hand is empty.
-    if (e.key === 'q' && !this.player1.hand.length) {
-      console.log('Player 1 is out of cards!');
-      this.currentPlayerTurn = this.player2;
-      return;
-    }
-
-    if (e.key === 'p' && !this.player2.hand.length) {
-      console.log('Player 2 is out of cards!');
-      this.currentPlayerTurn = this.player1;
-      return;
-    }
-
+  dealCard(player) {
     // Deal a card and add it to central pile. Pass turn to opponent.
-    if (e.key === 'q' && this.currentPlayerTurn === this.player1) {
-      this.centralPile.unshift(this.player1.playCard());
-      this.currentPlayerTurn = this.player2;
-      this.player1.lastAction = 'deal';
-      console.log(this.centralPile[0].value);
-    }
+    this.centralPile.unshift(player.playCard());
+    this.switchPlayerTurn(player);
+    console.log(this.centralPile[0].value);
 
-    if (e.key === 'p' && this.currentPlayerTurn === this.player2) {
-      this.centralPile.unshift(this.player2.playCard());
-      this.currentPlayerTurn = this.player1;
-      this.player2.lastAction = 'deal';
-      console.log(this.centralPile[0].value);
-    }
+    // this.player1.lastAction = 'deal';
 
-    // Reclaim turn if opponenet is out of cards
-    if (e.key === 'q' && !this.player2.hand.length) {
-      this.currentPlayerTurn = this.player1;
-    }
+    // // Reclaim turn if opponenet is out of cards
+    // if (e.key === 'q' && !this.player2.hand.length) {
+    //   this.currentPlayerTurn = this.player1;
+    // }
 
-    if (e.key === 'p' && !this.player1.hand.length) {
-      this.currentPlayerTurn = this.player2;
-    }
+    // if (e.key === 'p' && !this.player1.hand.length) {
+    //   this.currentPlayerTurn = this.player2;
+    // }
   }
 
   slapCard(e) {
@@ -196,5 +175,9 @@ class Game {
 
   isActivePlayerTurn(player) {
     return player === this.currentPlayerTurn;
+  }
+
+  switchPlayerTurn(player) {
+    this.currentPlayerTurn = (player === this.player1 ? this.player2 : this.player1);
   }
 }
