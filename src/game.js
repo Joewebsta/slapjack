@@ -30,6 +30,12 @@ class Game {
     if (e.key === 'q' || e.key === 'p') {
       this.dealCard(e);
     }
+
+    console.log(this.isPlayerDeal(e));
+
+    if (this.isPlayerDeal(e)) {
+      
+    }
     
     if (e.key === 'f' || e.key === 'j') {
       this.slapCard(e);
@@ -79,18 +85,27 @@ class Game {
     // Slapping not allowed immediately after a player claims the central pile. Must be a deal.
     if ((e.key === 'f' || e.key === 'j') && !this.centralPile.length) return;
 
-    if (e.key === 'j' && !this.player1.hand.length && this.isJack()) {
-      console.log('GAME OVER! PLAYER 1 LOSES');
-      return;
-    }
-    
+    // Game should end if opponenet slaps card when player has no cards
     if (e.key === 'f' && !this.player2.hand.length && this.isJack()) {
       console.log('GAME OVER! PLAYER 2 LOSES');
       return;
     }
+    
+    if (e.key === 'j' && !this.player1.hand.length && this.isJack()) { // USE exit() OR labels??
+      console.log('GAME OVER! PLAYER 1 LOSES');
+      return;
+    }
 
     // Player 1 out of cards, player 1 slaps incorrectly (illegal, double or sandwich) = Game over
-    // Player 1 out of cards, player 1 slaps (JACK ONLY) = Game continues
+    if (e.key === 'f' && !this.player2.hand.length && !this.isJack() && !this.isDouble() && !this.isSandwich()) {
+      console.log('GAME OVER! PLAYER 2 DID NOT SLAP A JACK TO REVIVE HIMSELF');
+      return;
+    }
+
+    if (e.key === 'j' && !this.player1.hand.length && !this.isJack() && !this.isDouble() && !this.isSandwich()) {
+      console.log('GAME OVER! PLAYER 1 DID NOT SLAP A JACK TO REVIVE HIMSELF');
+      return;
+    }
 
     if (this.isJack() || this.isDouble() || this.isSandwich()) {
       this.legalSlap(e);
@@ -148,5 +163,18 @@ class Game {
       this.currentPlayerTurn = this.player1;
       this.player2.lastAction = 'illegal';
     }
+  }
+
+  isPlayerDeal(e) {
+    return (e.key === 'q' || e.key === 'p');
+  }
+
+  playerHasCards(e) {
+
+  }
+
+  activePlayer(e) {
+    if (e.key === 'q' || e.key === 'f') return this.player1;
+    if (e.key === 'p' || e.key === 'j') return this.player2;
   }
 }
