@@ -29,20 +29,24 @@ class Game {
   handlePlayerActions(e) {  
     // If a player attempted to deal
     if (this.isPlayerDeal(e)) {
-      // determine the player that attmepted to deal
-      const activePlayer = this.activePlayer(e);
-    
-      // STOP player if it's not their turn OR if they have no cards
-      if (!activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
-      if (!activePlayer.hasCards()) return;
-
-      // active player deals a card
-      this.dealCard(activePlayer);
+      this.handlePlayerDeal(e);
     }
     
     if (e.key === 'f' || e.key === 'j') {
       this.slapCard(e);
     }
+  }
+
+  handlePlayerDeal(e) {
+    // determine the player that attmepted to deal
+    const activePlayer = this.activePlayer(e);
+    
+    // STOP player if it's not their turn OR if they have no cards
+    if (!activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
+    if (!activePlayer.hasCards()) return;
+
+    // active player deals a card
+    this.dealCard(activePlayer);
   }
 
   dealCard(player) {
