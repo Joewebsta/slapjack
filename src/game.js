@@ -27,24 +27,30 @@ class Game {
   }
 
   handlePlayerActions(e) {  
-    // if (e.key === 'q' || e.key === 'p') {
-    //   this.dealCard(e);
-    // }
-
-    // console.log(this.isPlayerDeal(e));
-
     // If a player attempted to deal
     if (this.isPlayerDeal(e)) {
       // determine the player that attmepted to deal
       const activePlayer = this.activePlayer(e);
+      const opponent = this.playerOpponent(activePlayer);
       
       // STOP player if it's not their turn OR if they have no cards
-      if (!this.isActivePlayerTurn(activePlayer) || !this.playerHasCards(activePlayer)) return;
+      if (!activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
+      if (!activePlayer.hasCards()) return;
       
       // active player deals a card
       this.dealCard(activePlayer);
       
+      // If player 1 plays card and player 2 has no cards, player 1 reclaims turn
+
+    // // Reclaim turn if opponenet is out of cards
+        // if (e.key === 'q' && !this.player2.hand.length) {
+        //   this.currentPlayerTurn = this.player1;
+        // }
+
       // IF OPPONENT HAS NO CARDS, RECLAIM TURN
+      // if (this.playerOpponent(activePlayer)) {
+
+      // }
       
       // console.log(`Player deal: ${this.isPlayerDeal(e)}`);
       // console.log(`Active player: ${activePlayer.name}`);
@@ -164,17 +170,13 @@ class Game {
     return (e.key === 'q' || e.key === 'p');
   }
 
-  playerHasCards(player) {
-    return player.hand.length;
+  playerOpponent(player) {
+    return player === this.player1 ? this.player2 : this.player1;
   }
 
   activePlayer(e) {
     if (e.key === 'q' || e.key === 'f') return this.player1;
     if (e.key === 'p' || e.key === 'j') return this.player2;
-  }
-
-  isActivePlayerTurn(player) {
-    return player === this.currentPlayerTurn;
   }
 
   switchPlayerTurn(player) {
