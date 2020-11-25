@@ -27,20 +27,21 @@ class Game {
   }
 
   handlePlayerActions(e) {  
-    // If a player attempted to deal
-    if (this.isPlayerDeal(e)) {
-      this.handlePlayerDeal(e);
-    }
-    
-    if (e.key === 'f' || e.key === 'j') {
-      this.slapCard(e);
-    }
-  }
-
-  handlePlayerDeal(e) {
     // determine the player that attmepted to deal
     const activePlayer = this.activePlayer(e);
     
+    // If a player attempted to deal
+    if (this.isPlayerDeal(e)) {
+      this.handlePlayerDeal(activePlayer);
+    }
+    
+    // If player attempted to slap
+    if (this.isPlayerSlap(e)) {
+      this.handlePlayerSlap(activePlayer);
+    }
+  }
+
+  handlePlayerDeal(activePlayer) {
     // STOP player if it's not their turn OR if they have no cards
     if (!activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
     if (!activePlayer.hasCards()) return;
@@ -52,15 +53,17 @@ class Game {
   dealCard(player) {
     const opponent = this.playerOpponent(player);
     
-    // Deal a card and add it to central pile. Pass turn to opponent.
+    // Deal a card and add it to central pile.
     this.centralPile.unshift(player.playCard());
     console.log(this.centralPile[0].value);
 
-    // If opponent is out of cards, player reclaims turn. OTHERWISE player turn switches after deal.
+    // If opponent is out of cards, player reclaims turn. OTHERWISE player turn switches to opponent.
     if (!opponent.hasCards()) return;
     this.switchPlayerTurn(player);
+  }
 
-    // this.player1.lastAction = 'deal';
+  handlePlayerSlap(activePlayer) {
+    console.log(activePlayer);
   }
 
   slapCard(e) {
@@ -149,6 +152,10 @@ class Game {
 
   isPlayerDeal(e) {
     return (e.key === 'q' || e.key === 'p');
+  }
+
+  isPlayerSlap(e) {
+    return (e.key === 'f' || e.key === 'j');
   }
 
   playerOpponent(player) {
