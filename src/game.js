@@ -38,16 +38,19 @@ class Game {
       // determine the player that attmepted to deal
       const activePlayer = this.activePlayer(e);
       
-      // determine if it's their turn
-      if (!this.isActivePlayerTurn(activePlayer)) return;
+      // STOP player if it's not their turn OR if they have no cards
+      if (!this.isActivePlayerTurn(activePlayer) || !this.playerHasCards(activePlayer)) return;
       
-      // deal card
+      // active player deals a card
       // this.dealCard();
       
-      console.log(`Player deal: ${this.isPlayerDeal(e)}`);
-      console.log(`Active player: ${activePlayer.name}`);
-      console.log(`Active player turn: ${this.isActivePlayerTurn(activePlayer)}`);
-      console.log('Deal a damn card already!');
+      // IF OPPONENT HAS NO CARDS, RECLAIM TURN
+      
+      // console.log(`Player deal: ${this.isPlayerDeal(e)}`);
+      // console.log(`Active player: ${activePlayer.name}`);
+      // console.log(`Active player turn: ${this.isActivePlayerTurn(activePlayer)}`);
+      // console.log(`Active player has cards: ${this.playerHasCards(activePlayer)}`);
+      // console.log('Deal a damn card already!');
     }
     
     if (e.key === 'f' || e.key === 'j') {
@@ -182,8 +185,8 @@ class Game {
     return (e.key === 'q' || e.key === 'p');
   }
 
-  playerHasCards(e) {
-
+  playerHasCards(player) {
+    return player.hand.length;
   }
 
   activePlayer(e) {
