@@ -26,47 +26,57 @@ class Game {
     this.player2.hand = this.cards.slice(midCardIdx, lastCardIdx);
   }
 
+  // || PLAYER ACTIONS
+
   handlePlayerActions(e) {  
-    // determine the player that attmepted to deal
     const activePlayer = this.activePlayer(e);
     const opponent = this.playerOpponent(activePlayer);
     
-    // If a player attempted to deal
     if (this.isPlayerDeal(e)) {
       this.handlePlayerDeal(activePlayer, opponent);
     }
     
-    // If player attempted to slap
     if (this.isPlayerSlap(e)) {
       this.handlePlayerSlap(activePlayer, opponent);
     }
   }
 
+  playerOpponent(player) {
+    return player === this.player1 ? this.player2 : this.player1;
+  }
+
+  activePlayer(e) {
+    if (e.key === 'q' || e.key === 'f') return this.player1;
+    if (e.key === 'p' || e.key === 'j') return this.player2;
+  }
+
+  isPlayerDeal(e) {
+    return (e.key === 'q' || e.key === 'p');
+  }
+
+  isPlayerSlap(e) {
+    return (e.key === 'f' || e.key === 'j');
+  } 
+
+  // || DEAL CARD
+
   handlePlayerDeal(activePlayer, opponent) {
-    // STOP player if it's not their turn OR if they have no cards
     if (!activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
     if (!activePlayer.hasCards()) return;
 
-    // active player deals a card
     this.dealCard(activePlayer, opponent);
   }
 
   dealCard(activePlayer, opponent) {
-    // Deal a card and add it to central pile.
     this.centralPile.unshift(activePlayer.playCard());
-    console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
-
     this.updateCurrentPlayerTurn(activePlayer, opponent);
+
+    console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
-  
-  updateCurrentPlayerTurn(activePlayer, opponent) {
-    // If opponent is out of cards, player reclaims turn. OTHERWISE player turn switches to opponent.
-    if (!opponent.hasCards()) return;
-    this.switchPlayerTurn(activePlayer);
-  }
+
+  // || SLAP CARD
 
   handlePlayerSlap(activePlayer, opponent) {
-    // Slapping not allowed immediately after a player claims the central pile. Must be a deal.
     if (!this.centralPile.length) return;
     
     // TODO: HOW TO PREVENT MULTIPLE SLAPS BACK TO BACK?
@@ -108,18 +118,6 @@ class Game {
     this.slap(activePlayer, opponent);
   }
 
-  slap(activePlayer, opponent) {
-    this.collectCentralPile(activePlayer);  
-    this.updateCurrentPlayerTurn(activePlayer, opponent);
-    this.centralPile = [];
-    console.log(`${activePlayer.name} legal and succesful slap!`);
-  }
-
-  collectCentralPile(activePlayer) {
-    activePlayer.hand = activePlayer.hand.concat(this.centralPile);
-    activePlayer.hand = this.shuffleCards(activePlayer.hand);
-  }
-
   handleIllegalSlap(activePlayer, opponent) {
     console.log('Illegal slap!');
     
@@ -131,18 +129,35 @@ class Game {
     this.transferCardToOpponent(activePlayer, opponent);
   }
 
-  isIllegalSlap() {
-    return !this.isJack() && !this.isDouble() && !this.isSandwich();
+  slap(activePlayer, opponent) {
+    this.collectCentralPile(activePlayer);  
+    this.updateCurrentPlayerTurn(activePlayer, opponent);
+    this.centralPile = [];
+    console.log(`${activePlayer.name} legal and succesful slap!`);
   }
 
-  isLegalSlap() {
-    return this.isJack() || this.isDouble() || this.isSandwich();
-  }
+// || SLAP OUTCOMES
 
   transferCardToOpponent(activePlayer, opponent) {
     opponent.hand.push(activePlayer.hand.shift());
     this.updateCurrentPlayerTurn(activePlayer, opponent);
     // this.player1.lastAction = 'illegal';
+  }
+
+  collectCentralPile(activePlayer) {
+    activePlayer.hand = activePlayer.hand.concat(this.centralPile);
+    activePlayer.hand = this.shuffleCards(activePlayer.hand);
+  }
+
+  updateCurrentPlayerTurn(activePlayer, opponent) {
+    if (!opponent.hasCards()) return;
+    this.currentPlayerTurn = (activePlayer === this.player1 ? this.player2 : this.player1);
+  }
+
+  // || SLAP CONDITIONALS
+
+  isIllegalSlap() {
+    return !this.isJack() && !this.isDouble() && !this.isSandwich();
   }
 
   isJack() {
@@ -159,26 +174,5 @@ class Game {
     if (this.centralPile.length >= 3) {
       return this.centralPile[0].value === this.centralPile[2].value;
     }
-  }
-
-  isPlayerDeal(e) {
-    return (e.key === 'q' || e.key === 'p');
-  }
-
-  isPlayerSlap(e) {
-    return (e.key === 'f' || e.key === 'j');
-  }
-
-  playerOpponent(player) {
-    return player === this.player1 ? this.player2 : this.player1;
-  }
-
-  activePlayer(e) {
-    if (e.key === 'q' || e.key === 'f') return this.player1;
-    if (e.key === 'p' || e.key === 'j') return this.player2;
-  }
-
-  switchPlayerTurn(player) {
-    this.currentPlayerTurn = (player === this.player1 ? this.player2 : this.player1);
   }
 }
