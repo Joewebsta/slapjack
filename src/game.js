@@ -69,20 +69,45 @@ class Game {
     // Slapping not allowed immediately after a player claims the central pile. Must be a deal.
     if (!this.centralPile.length) return;
     
-    // TODO: HOW TO PREVENT MULTIPLE SLAPS BACK TO BACK
+    // TODO: HOW TO PREVENT MULTIPLE SLAPS BACK TO BACK?
 
-    if (activePlayer.hasCards() && opponent.hasCards()) {
-      if (this.isIllegalSlap()) {
-        console.log('Illegal slap!');
-        this.transferCardToOpponent(activePlayer, opponent);
-      }
-
-      
+    if (this.isIllegalSlap()) {
+      this.handleIllegalSlap(activePlayer, opponent);
+      return;
     }
+
+    this.handleLegalSlap(activePlayer, opponent);
+
+    //   if (this.isLegalSlap()) {
+    //     activePlayer.hand = this.player1.hand.concat(this.centralPile);
+    //     this.player1.hand = this.shuffleCards(this.player1.hand);
+    //     this.currentPlayerTurn = this.player1;
+    //     console.log('Player 1 succesful slap!');
+    //   }      
+    // }
+  }
+
+  handleLegalSlap(activePlayer, opponent) {
+    console.log('Legal slap!');
+  }
+
+  handleIllegalSlap(activePlayer, opponent) {
+    console.log('Illegal slap!');
+    
+    if (!activePlayer.hasCards()) {
+      console.log(`Game over ${activePlayer.name} loses!`);
+      return;
+    }
+    
+    this.transferCardToOpponent(activePlayer, opponent);
   }
 
   isIllegalSlap() {
     return !this.isJack() && !this.isDouble() && !this.isSandwich();
+  }
+
+  isLegalSlap() {
+    return this.isJack() || this.isDouble() || this.isSandwich();
   }
 
   transferCardToOpponent(activePlayer, opponent) {
