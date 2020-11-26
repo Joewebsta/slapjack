@@ -88,13 +88,35 @@ class Game {
   }
 
   handleLegalSlap(activePlayer, opponent) {
-    // RECEIVE CENTRAL PILE
-    if (this.isLegalSlap()) {
-      this.collectCentralPile(activePlayer);  
-      this.updateCurrentPlayerTurn(activePlayer, opponent);
-      this.centralPile = [];
-      console.log(`${activePlayer.name} legal and succesful slap!`);
+    
+    if (activePlayer.hasCards() && !opponent.hasCards()) {
+      if (this.isDouble() || this.isSandwich()) {
+        this.slap(activePlayer, opponent);
+        return;
+      }
+
+      if (this.isJack) {
+        console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
+        return;
+      }
     }
+    
+    if (!activePlayer.hasCards() && !opponent.hasCards()) {
+
+    }
+
+    // RECEIVE CENTRAL PILE
+    // IF STATMENT MAY NOT BE NECESSARY
+    if (this.isLegalSlap()) {
+      this.slap(activePlayer, opponent);
+    }
+  }
+
+  slap(activePlayer, opponent) {
+    this.collectCentralPile(activePlayer);  
+    this.updateCurrentPlayerTurn(activePlayer, opponent);
+    this.centralPile = [];
+    console.log(`${activePlayer.name} legal and succesful slap!`);
   }
 
   collectCentralPile(activePlayer) {
