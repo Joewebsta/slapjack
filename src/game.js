@@ -51,25 +51,33 @@ class Game {
     this.dealCard(activePlayer, opponent);
   }
 
-  dealCard(player, opponent) {
+  dealCard(activePlayer, opponent) {
     // Deal a card and add it to central pile.
-    this.centralPile.unshift(player.playCard());
+    this.centralPile.unshift(activePlayer.playCard());
     console.log(this.centralPile[0].value);
 
+    this.UpdateCurrentPlayerTurn(activePlayer, opponent);
+  }
+  
+  UpdateCurrentPlayerTurn(activePlayer, opponent) {
     // If opponent is out of cards, player reclaims turn. OTHERWISE player turn switches to opponent.
     if (!opponent.hasCards()) return;
-    this.switchPlayerTurn(player);
+    this.switchPlayerTurn(activePlayer);
   }
 
   handlePlayerSlap(activePlayer, opponent) {
     // Slapping not allowed immediately after a player claims the central pile. Must be a deal.
     if (!this.centralPile.length) return;
     
+    // TODO: HOW TO PREVENT MULTIPLE SLAPS BACK TO BACK
+
     if (activePlayer.hasCards() && opponent.hasCards()) {
-      console.log('both have cards!');
       if (this.isIllegalSlap()) {
         console.log('Illegal slap!');
+        this.transferCardToOpponent(activePlayer, opponent);
       }
+
+      
     }
   }
 
@@ -77,8 +85,10 @@ class Game {
     return !this.isJack() && !this.isDouble() && !this.isSandwich();
   }
 
-  slapCard(e) {
-    
+  transferCardToOpponent(activePlayer, opponent) {
+    opponent.hand.push(activePlayer.hand.shift());
+    this.UpdateCurrentPlayerTurn(activePlayer, opponent);
+    // this.player1.lastAction = 'illegal';
   }
 
   isJack() {
