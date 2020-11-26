@@ -77,14 +77,6 @@ class Game {
     }
 
     this.handleLegalSlap(activePlayer, opponent);
-
-    //   if (this.isLegalSlap()) {
-    //     activePlayer.hand = this.player1.hand.concat(this.centralPile);
-    //     this.player1.hand = this.shuffleCards(this.player1.hand);
-    //     this.currentPlayerTurn = this.player1;
-    //     console.log('Player 1 succesful slap!');
-    //   }      
-    // }
   }
 
   handleLegalSlap(activePlayer, opponent) {
@@ -95,7 +87,7 @@ class Game {
         return;
       }
 
-      if (this.isJack) {
+      if (this.isJack()) {
         console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
         return;
       }
@@ -162,41 +154,6 @@ class Game {
   isSandwich() {
     if (this.centralPile.length >= 3) {
       return this.centralPile[0].value === this.centralPile[2].value;
-    }
-  }
-
-  legalSlap(e) {
-    if (e.key == 'f') {
-      this.player1.hand = this.player1.hand.concat(this.centralPile);
-      this.player1.hand = this.shuffleCards(this.player1.hand);
-      this.currentPlayerTurn = this.player1;
-      console.log('Player 1 succesful slap!');
-    }
-    
-    if (e.key == 'j') {
-      this.player2.hand = this.player2.hand.concat(this.centralPile);
-      this.player2.hand = this.shuffleCards(this.player2.hand);
-      this.currentPlayerTurn = this.player2;
-      console.log('Player 2 succesful slap!');
-    }
-    
-    this.centralPile = [];
-  }
-
-  illegalSlap(e) {
-    if (this.player1.lastAction === 'illegal' || this.player2.lastAction === 'illegal') return;
-    console.log('Illegal slap!');
-
-    if (e.key === 'f') {
-      this.player2.hand.push(this.player1.hand.shift());
-      this.currentPlayerTurn = this.player2;
-      this.player1.lastAction = 'illegal';
-    }
-    
-    if (e.key === 'j') {
-      this.player1.hand.push(this.player2.hand.shift());
-      this.currentPlayerTurn = this.player1;
-      this.player2.lastAction = 'illegal';
     }
   }
 
