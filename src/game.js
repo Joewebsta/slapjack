@@ -11,7 +11,7 @@ class Game {
   shuffleCards(cards) {
     const shuffledCards = [];
     while (cards.length) {
-      const randIdx = Math.round(Math.random() * (cards.length - 1));
+      const randIdx = Math.floor(Math.random() * cards.length);
       shuffledCards.push(cards[randIdx]);
       cards.splice(randIdx, 1);
     }
@@ -54,7 +54,7 @@ class Game {
   dealCard(activePlayer, opponent) {
     // Deal a card and add it to central pile.
     this.centralPile.unshift(activePlayer.playCard());
-    console.log(this.centralPile[0].value);
+    console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
 
     this.updateCurrentPlayerTurn(activePlayer, opponent);
   }
