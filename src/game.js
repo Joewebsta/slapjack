@@ -93,15 +93,19 @@ class Game {
       }
     }
     
-    if (!activePlayer.hasCards() && !opponent.hasCards()) {
+    if (!activePlayer.hasCards() && opponent.hasCards()) {
+      if (this.isJack()) {
+        this.slap(activePlayer, opponent);
+        return;
+      }
 
+      if (this.isDouble() || this.isSandwich()) {
+        console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
+        return;
+      }
     }
-
-    // RECEIVE CENTRAL PILE
-    // IF STATMENT MAY NOT BE NECESSARY
-    if (this.isLegalSlap()) {
-      this.slap(activePlayer, opponent);
-    }
+    
+    this.slap(activePlayer, opponent);
   }
 
   slap(activePlayer, opponent) {
