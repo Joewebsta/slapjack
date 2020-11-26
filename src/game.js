@@ -92,30 +92,40 @@ class Game {
   handleLegalSlap(activePlayer, opponent) {
     
     if (activePlayer.hasCards() && !opponent.hasCards()) {
-      if (this.isDouble() || this.isSandwich()) {
-        this.slap(activePlayer, opponent);
-        return;
-      }
-
-      if (this.isJack()) {
-        console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
-        return;
-      }
+     this.slapScenario1(activePlayer, opponent);
+     return;
     }
     
     if (!activePlayer.hasCards() && opponent.hasCards()) {
-      if (this.isJack()) {
-        this.slap(activePlayer, opponent);
-        return;
-      }
-
-      if (this.isDouble() || this.isSandwich()) {
-        console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
-        return;
-      }
+      this.slapScenario2(activePlayer, opponent); 
+      return;
     }
     
     this.slap(activePlayer, opponent);
+  }
+
+  slapScenario1(activePlayer, opponent) {
+    if (this.isDouble() || this.isSandwich()) {
+      this.slap(activePlayer, opponent);
+      return;
+    }
+
+    if (this.isJack()) {
+      console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
+      return;
+    }
+  }
+  
+  slapScenario2(activePlayer, opponent) {
+    if (this.isJack()) {
+      this.slap(activePlayer, opponent);
+      return;
+    }
+
+    if (this.isDouble() || this.isSandwich()) {
+      console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
+      return;
+    }
   }
 
   handleIllegalSlap(activePlayer, opponent) {
