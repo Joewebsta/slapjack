@@ -56,10 +56,10 @@ class Game {
     this.centralPile.unshift(activePlayer.playCard());
     console.log(this.centralPile[0].value);
 
-    this.UpdateCurrentPlayerTurn(activePlayer, opponent);
+    this.updateCurrentPlayerTurn(activePlayer, opponent);
   }
   
-  UpdateCurrentPlayerTurn(activePlayer, opponent) {
+  updateCurrentPlayerTurn(activePlayer, opponent) {
     // If opponent is out of cards, player reclaims turn. OTHERWISE player turn switches to opponent.
     if (!opponent.hasCards()) return;
     this.switchPlayerTurn(activePlayer);
@@ -88,7 +88,18 @@ class Game {
   }
 
   handleLegalSlap(activePlayer, opponent) {
-    console.log('Legal slap!');
+    // RECEIVE CENTRAL PILE
+    if (this.isLegalSlap()) {
+      this.collectCentralPile(activePlayer);  
+      this.updateCurrentPlayerTurn(activePlayer, opponent);
+      this.centralPile = [];
+      console.log(`${activePlayer.name} legal and succesful slap!`);
+    }
+  }
+
+  collectCentralPile(activePlayer) {
+    activePlayer.hand = activePlayer.hand.concat(this.centralPile);
+    activePlayer.hand = this.shuffleCards(activePlayer.hand);
   }
 
   handleIllegalSlap(activePlayer, opponent) {
@@ -112,7 +123,7 @@ class Game {
 
   transferCardToOpponent(activePlayer, opponent) {
     opponent.hand.push(activePlayer.hand.shift());
-    this.UpdateCurrentPlayerTurn(activePlayer, opponent);
+    this.updateCurrentPlayerTurn(activePlayer, opponent);
     // this.player1.lastAction = 'illegal';
   }
 
