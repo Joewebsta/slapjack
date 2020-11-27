@@ -1,4 +1,5 @@
 const centralCard = document.querySelector('.js-central-card');
+const headerMsg = document.querySelector('.js-header-message');
 
 const game = Game.initializeGame();
 game.dealPlayerDecks();
@@ -7,7 +8,7 @@ window.addEventListener('keypress', function(e) {
   game.handlePlayerActions(e);
 }.bind(game), false);
 
-function updateCentralCard(cardSrc, playerName) {
+function dealCard(cardSrc, playerName) {
   const centralCardImg = document.querySelector('.js-central-card-img');
 
   if (!centralCardImg) {
@@ -33,5 +34,22 @@ function updateCentralCardBorder(playerName, img) {
   } else {
     img.classList.add('player2-border');
     img.classList.remove('player1-border');
+  }
+}
+
+function slapCard(type, playerName) {
+  updateHeaderMsg(type, playerName)
+  clearCentralCard();
+}
+
+function clearCentralCard() {
+  const centralCardImg = document.querySelector('.js-central-card-img');
+  centralCardImg.remove();
+}
+
+
+function updateHeaderMsg(type, playerName) {
+  if (type === 'Slap Jack') {
+    headerMsg.textContent = `${type}! ${playerName} takes the pile!`;
   }
 }

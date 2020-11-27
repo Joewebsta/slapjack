@@ -11,6 +11,10 @@ body {
   background: #eee;
 }
 
+header h1 {
+  text-align: center;
+}
+
 .container {
   /* border: 2px solid salmon; */
   display: grid;
@@ -30,6 +34,7 @@ body {
 
 .card img {
   width: 230px;
+  border-radius: 8px;
 }
 
 .card .player1-border {

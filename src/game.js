@@ -86,9 +86,9 @@ class Game {
   dealCard(activePlayer, opponent) {
     this.centralPile.unshift(activePlayer.playCard());
     this.updateCurrentPlayerTurn(activePlayer, opponent);
+    dealCard(this.centralPile[0].src, activePlayer.name);
 
-    console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
-    updateCentralCard(this.centralPile[0].src, activePlayer.name);
+    // console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
 
   // || SLAP CARD
@@ -116,7 +116,7 @@ class Game {
       return;
     }
     
-    this.slap(activePlayer, opponent);
+    this.slap(activePlayer, opponent, 'Slap Jack');
   }
 
   slapScenario1(activePlayer, opponent) {
@@ -157,11 +157,13 @@ class Game {
     this.transferCardToOpponent(activePlayer, opponent);
   }
 
-  slap(activePlayer, opponent) {
+  slap(activePlayer, opponent, type) {
     this.collectCentralPile(activePlayer);  
     this.updateCurrentPlayerTurn(activePlayer, opponent);
     this.resetCentralPile();
-    console.log(`${activePlayer.name} legal and succesful slap!`);
+
+    slapCard(type, activePlayer.name);
+    // console.log(`${activePlayer.name} legal and succesful slap!`);
   }
 
 // || SLAP OUTCOMES
