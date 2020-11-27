@@ -33,6 +33,8 @@ function updateCentralCardSrc(cardSrc, playerName, centralCardImg) {
 }
 
 function updateCentralCardBorder(playerName, img) {
+  if (!img) return;
+  
   if (playerName.includes('1')) {
     img.classList.add('player1-border');
     img.classList.remove('player2-border');

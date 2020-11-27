@@ -11,7 +11,14 @@ body {
   background: #eee;
 }
 
+header {
+  border: 2px solid teal;
+  display: grid;
+  grid-template-rows: minmax(88px, auto);
+}
+
 header h1 {
+  border: 2px solid aquamarine;
   text-align: center;
 }
 
