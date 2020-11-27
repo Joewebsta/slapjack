@@ -165,14 +165,15 @@ class Game {
   }
 
   handleIllegalSlap(activePlayer, opponent) {
-    console.log('Illegal slap!');
+    // console.log('Illegal slap!');
     
     if (!activePlayer.hasCards()) {
       console.log(`Game over ${activePlayer.name} loses!`);
       this.resetGame();
       return;
     }
-    
+
+    badSlap(activePlayer.name, opponent.name);
     this.transferCardToOpponent(activePlayer, opponent);
   }
 

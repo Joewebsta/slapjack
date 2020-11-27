@@ -50,6 +50,10 @@ function slapCard(type, playerName) {
   clearCentralCard();
 }
 
+function badSlap(activePlayer, opponent) {
+  updateHeaderMsg('Bad slap', activePlayer, opponent)
+}
+
 function clearCentralCard() {
   const centralCardImg = document.querySelector('.js-central-card-img');
   centralCardImg.remove();
@@ -59,8 +63,12 @@ function clearHeaderMsg() {
   headerMsg.textContent = '';
 }
 
-function updateHeaderMsg(type, playerName) {
+function updateHeaderMsg(type, playerName, opponent) {
   if (type === 'Slap Jack' || type === 'Double' || type === 'Sandwich') {
     headerMsg.textContent = `${type}! ${playerName} takes the pile!`;
+  }
+  
+  if (type === 'Bad slap') {
+    headerMsg.textContent = `${type}! ${playerName} gives a card to ${opponent}.`;
   }
 }
