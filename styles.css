@@ -24,11 +24,18 @@ body {
 .card {
   /* border: 2px solid teal; */
   display: grid;
-  justify-items: center;
-  
+  justify-items: center; 
 }
+
 
 .card img {
   width: 230px;
+}
+
+.card .player1-border {
   border: 2px solid red;
+}
+
+.card .player2-border {
+  border: 2px solid blue;       
 }

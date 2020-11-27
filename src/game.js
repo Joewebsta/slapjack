@@ -88,7 +88,7 @@ class Game {
     this.updateCurrentPlayerTurn(activePlayer, opponent);
 
     console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
-    updateCentralCard(this.centralPile[0].src);
+    updateCentralCard(this.centralPile[0].src, activePlayer.name);
   }
 
   // || SLAP CARD
