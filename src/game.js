@@ -38,9 +38,8 @@ class Game {
 
   dealPlayerDecks() {
     const midCardIdx = (this.cards.length / 2);
-    const lastCardIdx = this.cards.length;
     this.player1.hand = this.cards.slice(0, midCardIdx);
-    this.player2.hand = this.cards.slice(midCardIdx, lastCardIdx);
+    this.player2.hand = this.cards.slice(midCardIdx);
   }
 
   // || PLAYER ACTIONS

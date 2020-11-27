@@ -5,3 +5,30 @@
 *, *:before, *:after {
   box-sizing: inherit;
 }
+
+body {
+  margin: 0;
+  background: #eee;
+}
+
+.container {
+  /* border: 2px solid salmon; */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 20px;
+}
+
+.card {
+  /* border: 2px solid teal; */
+  display: grid;
+  justify-items: center;
+  
+}
+
+.card img {
+  width: 230px;
+  border: 2px solid red;
+}
