@@ -88,7 +88,7 @@ class Game {
     this.updateCurrentPlayerTurn(activePlayer, opponent);
     dealCard(this.centralPile[0].src, activePlayer.name);
 
-    // console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
+    console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
 
   // || SLAP CARD
@@ -116,12 +116,17 @@ class Game {
       return;
     }
     
-    this.slap(activePlayer, opponent, 'Slap Jack');
+    this.slapScenario3(activePlayer, opponent);
   }
 
   slapScenario1(activePlayer, opponent) {
-    if (this.isDouble() || this.isSandwich()) {
-      this.slap(activePlayer, opponent);
+    if (this.isDouble()) {
+      this.slap(activePlayer, opponent, 'Double');
+      return;
+    }
+    
+    if (this.isSandwich()) {
+      this.slap(activePlayer, opponent, 'Sandwich');
       return;
     }
 
@@ -134,7 +139,7 @@ class Game {
   
   slapScenario2(activePlayer, opponent) {
     if (this.isJack()) {
-      this.slap(activePlayer, opponent);
+      this.slap(activePlayer, opponent, 'Slap Jack');
       return;
     }
 
@@ -142,6 +147,20 @@ class Game {
       console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
       this.resetGame();
       return;
+    }
+  }
+
+  slapScenario3(activePlayer, opponent) {
+    if (this.isJack()) {
+      this.slap(activePlayer, opponent, 'Slap Jack');
+    }
+    
+    if (this.isDouble()) {
+      this.slap(activePlayer, opponent, 'Double');
+    }
+
+    if (this.isSandwich()) {
+      this.slap(activePlayer, opponent, 'Sandwich');
     }
   }
 

@@ -45,7 +45,8 @@ function updateCentralCardBorder(playerName, img) {
 }
 
 function slapCard(type, playerName) {
-  updateHeaderMsg(type, playerName)
+  console.log(type);
+  updateHeaderMsg(type, playerName);
   clearCentralCard();
 }
 
@@ -59,7 +60,7 @@ function clearHeaderMsg() {
 }
 
 function updateHeaderMsg(type, playerName) {
-  if (type === 'Slap Jack') {
+  if (type === 'Slap Jack' || type === 'Double' || type === 'Sandwich') {
     headerMsg.textContent = `${type}! ${playerName} takes the pile!`;
   }
 }
