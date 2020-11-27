@@ -11,12 +11,8 @@ window.addEventListener('keypress', function(e) {
 function dealCard(cardSrc, playerName) {
   const centralCardImg = document.querySelector('.js-central-card-img');
 
-  if (!centralCardImg) {
-    createCentralCardImg(cardSrc, playerName);
-    return;
-  }
-  
-  centralCardImg.src = cardSrc;
+  clearHeaderMsg();
+  updateCentralCardSrc(cardSrc, playerName, centralCardImg);
   updateCentralCardBorder(playerName, centralCardImg);
 }
 
@@ -25,6 +21,15 @@ function createCentralCardImg(src, playerName) {
   const cardImgHTML = `<img class="js-central-card-img ${playerBorder}" src="${src}" alt="">`;
   
   centralCard.insertAdjacentHTML('afterbegin', cardImgHTML);
+}
+
+function updateCentralCardSrc(cardSrc, playerName, centralCardImg) {
+  if (!centralCardImg) {
+    createCentralCardImg(cardSrc, playerName);
+    return;
+  }
+  
+  centralCardImg.src = cardSrc;
 }
 
 function updateCentralCardBorder(playerName, img) {
@@ -47,6 +52,9 @@ function clearCentralCard() {
   centralCardImg.remove();
 }
 
+function clearHeaderMsg() {  
+  headerMsg.textContent = '';
+}
 
 function updateHeaderMsg(type, playerName) {
   if (type === 'Slap Jack') {
