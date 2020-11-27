@@ -1,13 +1,30 @@
 class Game {
 
+  static initializeGame() {
+    const cards = this.createCards();
+    const player1 = new Player('Player 1');
+    const player2 = new Player('Player 2');
+    return new Game(player1, player2, cards);
+  }
+
+  static createCards() {
+    return cardImgSrc.reduce((cardArr, cardFileName) => {
+      const cardProps = cardFileName.substr(0, cardFileName.length - 4).split('-');
+      const color = cardProps[0];
+      const value = cardProps[1];
+      cardArr.push(new Card(color, value, `../assets/${cardFileName}`));
+      return cardArr;
+    }, []);
+  }
+
   constructor(player1, player2, cards) {
     this.player1 = player1;
     this.player2 = player2;
-    this.cards = cards;
+    this.cards = this.shuffleCards(cards);
     this.centralPile = [];
     this.currentPlayerTurn = this.player1;
   }
-  
+
   shuffleCards(cards) {
     const shuffledCards = [];
     while (cards.length) {
@@ -171,10 +188,6 @@ class Game {
     this.currentPlayerTurn = this.player1;
   }
 
-  resetCentralPile() {
-    this.centralPile = [];
-  }
-
   // || SLAP CONDITIONALS
 
   isIllegalSlap() {
@@ -195,5 +208,11 @@ class Game {
     if (this.centralPile.length >= 3) {
       return this.centralPile[0].value === this.centralPile[2].value;
     }
+  }
+
+  // || UTILITIES
+  
+  resetCentralPile() {
+    this.centralPile = [];
   }
 }
