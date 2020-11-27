@@ -79,8 +79,6 @@ class Game {
   handlePlayerSlap(activePlayer, opponent) {
     if (!this.centralPile.length) return;
     
-    // TODO: HOW TO PREVENT MULTIPLE SLAPS BACK TO BACK?
-
     if (this.isIllegalSlap()) {
       this.handleIllegalSlap(activePlayer, opponent);
       return;
@@ -112,6 +110,7 @@ class Game {
 
     if (this.isJack()) {
       console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
+      this.resetGame();
       return;
     }
   }
@@ -124,6 +123,7 @@ class Game {
 
     if (this.isDouble() || this.isSandwich()) {
       console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
+      this.resetGame();
       return;
     }
   }
@@ -133,6 +133,7 @@ class Game {
     
     if (!activePlayer.hasCards()) {
       console.log(`Game over ${activePlayer.name} loses!`);
+      this.resetGame();
       return;
     }
     
@@ -142,7 +143,7 @@ class Game {
   slap(activePlayer, opponent) {
     this.collectCentralPile(activePlayer);  
     this.updateCurrentPlayerTurn(activePlayer, opponent);
-    this.centralPile = [];
+    this.resetCentralPile();
     console.log(`${activePlayer.name} legal and succesful slap!`);
   }
 
@@ -151,7 +152,6 @@ class Game {
   transferCardToOpponent(activePlayer, opponent) {
     opponent.hand.push(activePlayer.hand.shift());
     this.updateCurrentPlayerTurn(activePlayer, opponent);
-    // this.player1.lastAction = 'illegal';
   }
 
   collectCentralPile(activePlayer) {
@@ -162,6 +162,17 @@ class Game {
   updateCurrentPlayerTurn(activePlayer, opponent) {
     if (!opponent.hasCards()) return;
     this.currentPlayerTurn = (activePlayer === this.player1 ? this.player2 : this.player1);
+  }
+
+  resetGame() {
+    game.cards = game.shuffleCards(game.cards);
+    game.dealPlayerDecks();
+    this.resetCentralPile();
+    this.currentPlayerTurn = this.player1;
+  }
+
+  resetCentralPile() {
+    this.centralPile = [];
   }
 
   // || SLAP CONDITIONALS
