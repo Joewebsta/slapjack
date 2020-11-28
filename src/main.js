@@ -57,9 +57,10 @@ function updateCardCount(activePlayer) {
   p2CardCount.textContent = activePlayer.hand.length;
 }
 
-function slapCard(type, playerName) {
+function slapCard(type, activePlayer) {
   console.log(type);
-  updateHeaderMsg(type, playerName);
+  updateHeaderMsg(type, activePlayer.name);
+  updateCardCount(activePlayer);
   clearCentralCard();
 }
 

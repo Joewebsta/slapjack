@@ -182,7 +182,7 @@ class Game {
     this.updateCurrentPlayerTurn(activePlayer, opponent);
     this.resetCentralPile();
 
-    slapCard(type, activePlayer.name);
+    slapCard(type, activePlayer);
     // console.log(`${activePlayer.name} legal and succesful slap!`);
   }
 
