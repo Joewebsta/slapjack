@@ -18,18 +18,20 @@ window.addEventListener('keypress', function(e) {
 
 function dealCard(cardSrc, activePlayer) {
   const centralCardImg = document.querySelector('.js-central-card-img');
-  const playerName = activePlayer.name;
 
   clearHeaderMsg();
 
   if (!centralCardImg) {
-    createCentralCardImg(cardSrc, playerName);
+    createFirstCard(cardSrc, activePlayer);
+  } else {
+    updateCentralCardSrc(cardSrc, centralCardImg);
+    updateCentralCardBorder(activePlayer.name, centralCardImg);
     updateCardCount(activePlayer);
-    return;
   }
+}
 
-  updateCentralCardSrc(cardSrc, centralCardImg);
-  updateCentralCardBorder(playerName, centralCardImg);
+function createFirstCard(cardSrc, activePlayer) {
+  createCentralCardImg(cardSrc, activePlayer.name);
   updateCardCount(activePlayer);
 }
 
