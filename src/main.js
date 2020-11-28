@@ -3,12 +3,18 @@ const centralCard = document.querySelector('.js-central-card');
 const p1CardCount = document.querySelector('.js-p1-card-count');
 const p2CardCount = document.querySelector('.js-p2-card-count');
 
+// || INITIALIZE GAME
+
 const game = Game.initializeGame();
 game.dealPlayerDecks();
+
+// || EVENT LISTENERS
 
 window.addEventListener('keypress', function(e) {
   game.handlePlayerActions(e);
 }.bind(game), false);
+
+// || DEAL CARD
 
 function dealCard(cardSrc, activePlayer) {
   const centralCardImg = document.querySelector('.js-central-card-img');
@@ -50,14 +56,7 @@ function updateCentralCardBorder(playerName, img) {
   }
 }
 
-function updateCardCount(activePlayer) {
-  if (isPlayer1(activePlayer.name)) {
-    p1CardCount.textContent = activePlayer.hand.length;
-    return;
-  }
-
-  p2CardCount.textContent = activePlayer.hand.length;
-}
+// || SLAP CARD
 
 function slapCard(type, activePlayer) {
   console.log(type);
@@ -71,6 +70,17 @@ function badSlap(activePlayer, opponent) {
   updateCardCountBadSlap(activePlayer, opponent);
 }
 
+// || MANAGE CARD COUNT
+
+function updateCardCount(activePlayer) {
+  if (isPlayer1(activePlayer.name)) {
+    p1CardCount.textContent = activePlayer.hand.length;
+    return;
+  }
+
+  p2CardCount.textContent = activePlayer.hand.length;
+}
+
 function updateCardCountBadSlap(activePlayer, opponent) {
   if (isPlayer1(activePlayer.name)) {
     p1CardCount.textContent = activePlayer.hand.length;
@@ -82,10 +92,7 @@ function updateCardCountBadSlap(activePlayer, opponent) {
   p2CardCount.textContent = activePlayer.hand.length;
 }
 
-function clearCentralCard() {
-  const centralCardImg = document.querySelector('.js-central-card-img');
-  centralCardImg.remove();
-}
+// || HEADER MESSAGE
 
 function clearHeaderMsg() {  
   headerMsg.textContent = '';
@@ -99,6 +106,13 @@ function updateHeaderMsg(type, playerName, opponent) {
   if (type === 'Bad slap') {
     headerMsg.textContent = `${type}! ${playerName} gives a card to ${opponent}.`;
   }
+}
+
+// || HELPERS
+
+function clearCentralCard() {
+  const centralCardImg = document.querySelector('.js-central-card-img');
+  centralCardImg.remove();
 }
 
 function isPlayer1(playerName) {
