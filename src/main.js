@@ -14,13 +14,15 @@ function dealCard(cardSrc, activePlayer) {
   const centralCardImg = document.querySelector('.js-central-card-img');
   const playerName = activePlayer.name;
 
+  clearHeaderMsg();
+
   if (!centralCardImg) {
     createCentralCardImg(cardSrc, playerName);
+    updateCardCount(activePlayer);
     return;
   }
 
-  clearHeaderMsg();
-  updateCentralCardSrc(cardSrc, playerName, centralCardImg);
+  updateCentralCardSrc(cardSrc, centralCardImg);
   updateCentralCardBorder(playerName, centralCardImg);
   updateCardCount(activePlayer);
 }
@@ -32,7 +34,7 @@ function createCentralCardImg(src, playerName) {
   centralCard.insertAdjacentHTML('afterbegin', cardImgHTML);
 }
 
-function updateCentralCardSrc(cardSrc, playerName, centralCardImg) {
+function updateCentralCardSrc(cardSrc, centralCardImg) {
   centralCardImg.src = cardSrc;
 }
 
@@ -65,7 +67,19 @@ function slapCard(type, activePlayer) {
 }
 
 function badSlap(activePlayer, opponent) {
-  updateHeaderMsg('Bad slap', activePlayer, opponent)
+  updateHeaderMsg('Bad slap', activePlayer.name, opponent.name);
+  updateCardCountBadSlap(activePlayer, opponent);
+}
+
+function updateCardCountBadSlap(activePlayer, opponent) {
+  if (isPlayer1(activePlayer.name)) {
+    p1CardCount.textContent = activePlayer.hand.length;
+    p2CardCount.textContent = opponent.hand.length;
+    return;
+  }
+  
+  p1CardCount.textContent = opponent.hand.length;
+  p2CardCount.textContent = activePlayer.hand.length;
 }
 
 function clearCentralCard() {

@@ -173,8 +173,8 @@ class Game {
       return;
     }
 
-    badSlap(activePlayer.name, opponent.name);
     this.transferCardToOpponent(activePlayer, opponent);
+    badSlap(activePlayer, opponent);
   }
 
   slap(activePlayer, opponent, type) {
