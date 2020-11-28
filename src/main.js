@@ -1,5 +1,7 @@
-const centralCard = document.querySelector('.js-central-card');
 const headerMsg = document.querySelector('.js-header-message');
+const centralCard = document.querySelector('.js-central-card');
+const p1CardCount = document.querySelector('.js-p1-card-count');
+const p2CardCount = document.querySelector('.js-p2-card-count');
 
 const game = Game.initializeGame();
 game.dealPlayerDecks();
@@ -8,40 +10,51 @@ window.addEventListener('keypress', function(e) {
   game.handlePlayerActions(e);
 }.bind(game), false);
 
-function dealCard(cardSrc, playerName) {
+function dealCard(cardSrc, activePlayer) {
   const centralCardImg = document.querySelector('.js-central-card-img');
+  const playerName = activePlayer.name;
+
+  if (!centralCardImg) {
+    createCentralCardImg(cardSrc, playerName);
+    return;
+  }
 
   clearHeaderMsg();
   updateCentralCardSrc(cardSrc, playerName, centralCardImg);
   updateCentralCardBorder(playerName, centralCardImg);
+  updateCardCount(activePlayer);
 }
 
 function createCentralCardImg(src, playerName) {
-  const playerBorder = playerName.includes('1') ? 'player1-border' : 'player2-border';
+  const playerBorder = isPlayer1(playerName) ? 'player1-border' : 'player2-border';
   const cardImgHTML = `<img class="js-central-card-img ${playerBorder}" src="${src}" alt="">`;
   
   centralCard.insertAdjacentHTML('afterbegin', cardImgHTML);
 }
 
 function updateCentralCardSrc(cardSrc, playerName, centralCardImg) {
-  if (!centralCardImg) {
-    createCentralCardImg(cardSrc, playerName);
-    return;
-  }
-  
   centralCardImg.src = cardSrc;
 }
 
 function updateCentralCardBorder(playerName, img) {
   if (!img) return;
   
-  if (playerName.includes('1')) {
+  if (isPlayer1(playerName)) {
     img.classList.add('player1-border');
     img.classList.remove('player2-border');
   } else {
     img.classList.add('player2-border');
     img.classList.remove('player1-border');
   }
+}
+
+function updateCardCount(activePlayer) {
+  if (isPlayer1(activePlayer.name)) {
+    p1CardCount.textContent = activePlayer.hand.length;
+    return;
+  }
+
+  p2CardCount.textContent = activePlayer.hand.length;
 }
 
 function slapCard(type, playerName) {
@@ -71,4 +84,8 @@ function updateHeaderMsg(type, playerName, opponent) {
   if (type === 'Bad slap') {
     headerMsg.textContent = `${type}! ${playerName} gives a card to ${opponent}.`;
   }
+}
+
+function isPlayer1(playerName) {
+  return playerName.includes('1');
 }

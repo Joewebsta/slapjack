@@ -86,7 +86,7 @@ class Game {
   dealCard(activePlayer, opponent) {
     this.centralPile.unshift(activePlayer.playCard());
     this.updateCurrentPlayerTurn(activePlayer, opponent);
-    dealCard(this.centralPile[0].src, activePlayer.name);
+    dealCard(this.centralPile[0].src, activePlayer, opponent);
 
     console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
