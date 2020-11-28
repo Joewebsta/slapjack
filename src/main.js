@@ -1,9 +1,12 @@
+// TODO: BUG - PLAYERS CAN BAD SLAP MULTIPLE TIMES
+
 const headerMsg = document.querySelector('.js-header-message');
 const centralCard = document.querySelector('.js-central-card');
 const p1Hand = document.querySelector('.js-p1-hand');
 const p2Hand = document.querySelector('.js-p2-hand');
 const p1CardCount = document.querySelector('.js-p1-card-count');
 const p2CardCount = document.querySelector('.js-p2-card-count');
+const centralCardCount = document.querySelector('.js-central-card-count');
 const p1CardEmptyState = document.querySelector('.js-p1-card-empty');
 const p2CardEmptyState = document.querySelector('.js-p2-card-empty');
 
@@ -20,25 +23,26 @@ window.addEventListener('keypress', function(e) {
 
 // || DEAL CARD
 
-function dealCard(cardSrc, activePlayer) {
+function dealCard(centralPile, activePlayer) {
+  const cardSrc = centralPile[0].src;
   const centralCardImg = document.querySelector('.js-central-card-img');
 
   clearHeaderMsg();
   
   if (!centralCardImg) {
-    createFirstCard(cardSrc, activePlayer);
+    createFirstCard(cardSrc, activePlayer, centralPile);
   } else {
     updateCentralCardSrc(cardSrc, centralCardImg);
     updateCentralCardBorder(activePlayer.name, centralCardImg);
-    updateCardCount(activePlayer);
+    updateCardCount(activePlayer, centralPile);
   }
   
   updateCardEmptyState(activePlayer); 
 }
 
-function createFirstCard(cardSrc, activePlayer) {
+function createFirstCard(cardSrc, activePlayer, centralPile) {
   createCentralCardImg(cardSrc, activePlayer.name);
-  updateCardCount(activePlayer);
+  updateCardCount(activePlayer, centralPile);
 }
 
 function createCentralCardImg(src, playerName) {
@@ -66,10 +70,10 @@ function updateCentralCardBorder(playerName, img) {
 
 // || SLAP CARD
 
-function slapCard(type, activePlayer) {
+function slapCard(type, activePlayer, centralPile) {
   console.log(type);
   updateHeaderMsg(type, activePlayer.name);
-  updateCardCount(activePlayer);
+  updateCardCount(activePlayer, centralPile);
   clearCentralCard();
   updateCardEmptyState(activePlayer); 
 }
@@ -81,7 +85,9 @@ function badSlap(activePlayer, opponent) {
 
 // || MANAGE CARD COUNT
 
-function updateCardCount(activePlayer) {
+function updateCardCount(activePlayer, centralPile) {
+  centralCardCount.textContent = centralPile.length;
+
   if (isPlayer1(activePlayer.name)) {
     p1CardCount.textContent = activePlayer.hand.length;
     return;
