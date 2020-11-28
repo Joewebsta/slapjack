@@ -1,7 +1,11 @@
 const headerMsg = document.querySelector('.js-header-message');
 const centralCard = document.querySelector('.js-central-card');
+const p1Hand = document.querySelector('.js-p1-hand');
+const p2Hand = document.querySelector('.js-p2-hand');
 const p1CardCount = document.querySelector('.js-p1-card-count');
 const p2CardCount = document.querySelector('.js-p2-card-count');
+const p1CardEmptyState = document.querySelector('.js-p1-card-empty');
+const p2CardEmptyState = document.querySelector('.js-p2-card-empty');
 
 // || INITIALIZE GAME
 
@@ -20,7 +24,7 @@ function dealCard(cardSrc, activePlayer) {
   const centralCardImg = document.querySelector('.js-central-card-img');
 
   clearHeaderMsg();
-
+  
   if (!centralCardImg) {
     createFirstCard(cardSrc, activePlayer);
   } else {
@@ -28,6 +32,8 @@ function dealCard(cardSrc, activePlayer) {
     updateCentralCardBorder(activePlayer.name, centralCardImg);
     updateCardCount(activePlayer);
   }
+  
+  updateCardEmptyState(activePlayer); 
 }
 
 function createFirstCard(cardSrc, activePlayer) {
@@ -65,6 +71,7 @@ function slapCard(type, activePlayer) {
   updateHeaderMsg(type, activePlayer.name);
   updateCardCount(activePlayer);
   clearCentralCard();
+  updateCardEmptyState(activePlayer); 
 }
 
 function badSlap(activePlayer, opponent) {
@@ -107,6 +114,20 @@ function updateHeaderMsg(type, playerName, opponent) {
   
   if (type === 'Bad slap') {
     headerMsg.textContent = `${type}! ${playerName} gives a card to ${opponent}.`;
+  }
+}
+
+// || CARD EMPTY STATE
+function updateCardEmptyState(activePlayer) {
+  const cardEmptyState = isPlayer1(activePlayer.name) ? p1CardEmptyState : p2CardEmptyState;
+  const hand = isPlayer1(activePlayer.name) ? p1Hand : p2Hand;
+
+  if (!activePlayer.hand.length) {
+    cardEmptyState.hidden = false;
+    hand.hidden = true;
+  } else {
+    cardEmptyState.hidden = true;
+    hand.hidden = false;
   }
 }
 
