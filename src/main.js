@@ -85,18 +85,29 @@ function badSlap(activePlayer, opponent) {
   updateCardCountBadSlap(activePlayer, opponent);
 }
 
-function gameOver(activePlayer, centralPile) {
+// || GAME OVER 
+
+function gameOver(activePlayer) {
   updateHeaderMsg('Game over', activePlayer.name);
   clearCentralCard();
+  resetCardCounts();
+  resetCardStates();
+  
+  // Update win count - local storage
+}
+
+function resetCardCounts() {
   p1CardCount.textContent = '26';
   p2CardCount.textContent = '26';
   centralCardCount.textContent = '0';
+}
+
+function resetCardStates() {
   p1CardEmptyState.hidden = true;
   p2CardEmptyState.hidden = true;
   centralCardEmptyState.hidden = false;
   p1Hand.hidden = false;
   p2Hand.hidden = false;
-  // Update win count - local storage
 }
 
 // || MANAGE CARD COUNT
