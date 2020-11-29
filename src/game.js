@@ -89,7 +89,7 @@ class Game {
     this.updateCurrentPlayerTurn(activePlayer, opponent);
     dealCard(this.centralPile, activePlayer);
 
-    // console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
+    console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
 
   // || SLAP CARD
@@ -148,6 +148,7 @@ class Game {
     if (this.isDouble() || this.isSandwich()) {
       console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
       this.resetGame();
+      gameOver(activePlayer, this.centralPile);
       return;
     }
   }
@@ -172,6 +173,7 @@ class Game {
     if (!activePlayer.hasCards()) {
       console.log(`Game over ${activePlayer.name} loses!`);
       this.resetGame();
+      gameOver(activePlayer, this.centralPile);
       return;
     }
 
