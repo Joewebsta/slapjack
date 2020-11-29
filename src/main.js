@@ -83,6 +83,7 @@ function slapCard(type, activePlayer, centralPile) {
 function badSlap(activePlayer, opponent) {
   updateHeaderMsg('Bad slap', activePlayer.name, opponent.name);
   updateCardCountBadSlap(activePlayer, opponent);
+  resetPlayerCardStates();
 }
 
 // || GAME OVER 
@@ -91,7 +92,8 @@ function gameOver(activePlayer) {
   updateHeaderMsg('Game over', activePlayer.name);
   clearCentralCard();
   resetCardCounts();
-  resetCardStates();
+  resetPlayerCardStates();
+  resetCentralCardEmptyState();
   resetHeaderMsg();
   // Update win count - local storage
 }
@@ -102,12 +104,15 @@ function resetCardCounts() {
   centralCardCount.textContent = '0';
 }
 
-function resetCardStates() {
+function resetPlayerCardStates() {
   p1CardEmptyState.hidden = true;
   p2CardEmptyState.hidden = true;
-  centralCardEmptyState.hidden = false;
   p1Hand.hidden = false;
   p2Hand.hidden = false;
+}
+
+function resetCentralCardEmptyState() {
+  centralCardEmptyState.hidden = false;
 }
 
 function resetHeaderMsg() {
