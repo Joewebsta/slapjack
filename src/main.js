@@ -88,8 +88,8 @@ function badSlap(activePlayer, opponent) {
 
 // || GAME OVER 
 
-function gameOver(activePlayer) {
-  updateHeaderMsg('Game over', activePlayer.name);
+function gameOver(activePlayer, opponent, type) {
+  updateHeaderMsg(type, activePlayer.name, opponent.name);
   clearCentralCard();
   resetCardCounts();
   resetPlayerCardStates();
@@ -151,17 +151,21 @@ function clearHeaderMsg() {
   headerMsg.textContent = '';
 }
 
-function updateHeaderMsg(type, playerName, opponent) {
+function updateHeaderMsg(type, playerName, opponentName) {
   if (type === 'Slap Jack' || type === 'Double' || type === 'Sandwich') {
     headerMsg.textContent = `${type}! ${playerName} takes the pile!`;
   }
   
   if (type === 'Bad slap') {
-    headerMsg.textContent = `${type}! ${playerName} gives a card to ${opponent}.`;
+    headerMsg.textContent = `${type}! ${playerName} gives a card to ${opponentName}.`;
   }
   
   if (type === 'Game over') {
     headerMsg.textContent = `${type}! ${playerName} wins!`;
+  }
+
+  if (type === 'Game over illegal') {
+    headerMsg.textContent = `Game over! ${opponentName} wins!`;
   }
 }
 

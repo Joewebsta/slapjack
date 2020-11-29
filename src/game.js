@@ -134,7 +134,7 @@ class Game {
     if (this.isJack()) {
       console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
       this.resetGame();
-      gameOver(activePlayer, this.centralPile);
+      gameOver(activePlayer, opponent, 'Game over');
       return;
     }
   }
@@ -148,7 +148,7 @@ class Game {
     if (this.isDouble() || this.isSandwich()) {
       console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
       this.resetGame();
-      gameOver(activePlayer, this.centralPile);
+      gameOver(activePlayer, opponent, 'Game over illegal');
       return;
     }
   }
@@ -173,7 +173,7 @@ class Game {
     if (!activePlayer.hasCards()) {
       console.log(`Game over ${activePlayer.name} loses!`);
       this.resetGame();
-      gameOver(activePlayer, this.centralPile);
+      gameOver(activePlayer, opponent, 'Game over illegal');
       return;
     }
 
