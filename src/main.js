@@ -9,6 +9,8 @@ const p2CardCount = document.querySelector('.js-p2-card-count');
 const centralCardCount = document.querySelector('.js-central-card-count');
 const p1CardEmptyState = document.querySelector('.js-p1-card-empty');
 const p2CardEmptyState = document.querySelector('.js-p2-card-empty');
+const centralCardEmptyState = document.querySelector('.js-central-card-empty');
+
 
 // || INITIALIZE GAME
 
@@ -37,7 +39,7 @@ function dealCard(centralPile, activePlayer) {
     updateCardCount(activePlayer, centralPile);
   }
   
-  updateCardEmptyState(activePlayer); 
+  updateCardEmptyState(activePlayer, centralPile); 
 }
 
 function createFirstCard(cardSrc, activePlayer, centralPile) {
@@ -46,7 +48,7 @@ function createFirstCard(cardSrc, activePlayer, centralPile) {
 }
 
 function createCentralCardImg(src, playerName) {
-  const playerBorder = isPlayer1(playerName) ? 'player1-border' : 'player2-border';
+  const playerBorder = isPlayer1(playerName) ? 'p1-hand' : 'p2-hand';
   const cardImgHTML = `<img class="js-central-card-img ${playerBorder}" src="${src}" alt="">`;
   
   centralCard.insertAdjacentHTML('afterbegin', cardImgHTML);
@@ -60,11 +62,11 @@ function updateCentralCardBorder(playerName, img) {
   if (!img) return;
   
   if (isPlayer1(playerName)) {
-    img.classList.add('player1-border');
-    img.classList.remove('player2-border');
+    img.classList.add('p1-hand');
+    img.classList.remove('p2-hand');
   } else {
-    img.classList.add('player2-border');
-    img.classList.remove('player1-border');
+    img.classList.add('p2-hand');
+    img.classList.remove('p1-hand');
   }
 }
 
@@ -75,7 +77,7 @@ function slapCard(type, activePlayer, centralPile) {
   updateHeaderMsg(type, activePlayer.name);
   updateCardCount(activePlayer, centralPile);
   clearCentralCard();
-  updateCardEmptyState(activePlayer); 
+  updateCardEmptyState(activePlayer, centralPile); 
 }
 
 function badSlap(activePlayer, opponent) {
@@ -124,7 +126,7 @@ function updateHeaderMsg(type, playerName, opponent) {
 }
 
 // || CARD EMPTY STATE
-function updateCardEmptyState(activePlayer) {
+function updateCardEmptyState(activePlayer, centralPile) {
   const cardEmptyState = isPlayer1(activePlayer.name) ? p1CardEmptyState : p2CardEmptyState;
   const hand = isPlayer1(activePlayer.name) ? p1Hand : p2Hand;
 
@@ -134,6 +136,12 @@ function updateCardEmptyState(activePlayer) {
   } else {
     cardEmptyState.hidden = true;
     hand.hidden = false;
+  }
+
+  if (centralPile.length) {
+    centralCardEmptyState.hidden = true;
+  } else {
+    centralCardEmptyState.hidden = false;
   }
 }
 
