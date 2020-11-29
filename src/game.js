@@ -37,6 +37,7 @@ class Game {
   }
 
   dealPlayerDecks() {
+    console.log('Deal player decks!');
     const midCardIdx = (this.cards.length / 2);
     this.player1.hand = this.cards.slice(0, midCardIdx);
     this.player2.hand = this.cards.slice(midCardIdx);
@@ -88,7 +89,7 @@ class Game {
     this.updateCurrentPlayerTurn(activePlayer, opponent);
     dealCard(this.centralPile, activePlayer);
 
-    console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
+    // console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
 
   // || SLAP CARD
@@ -133,6 +134,7 @@ class Game {
     if (this.isJack()) {
       console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
       this.resetGame();
+      gameOver(activePlayer, this.centralPile);
       return;
     }
   }
