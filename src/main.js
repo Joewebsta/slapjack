@@ -92,7 +92,7 @@ function gameOver(activePlayer) {
   clearCentralCard();
   resetCardCounts();
   resetCardStates();
-  
+  resetHeaderMsg();
   // Update win count - local storage
 }
 
@@ -108,6 +108,12 @@ function resetCardStates() {
   centralCardEmptyState.hidden = false;
   p1Hand.hidden = false;
   p2Hand.hidden = false;
+}
+
+function resetHeaderMsg() {
+  setTimeout(() => { 
+    headerMsg.textContent = `Slap Jack!`;
+  }, 3000);
 }
 
 // || MANAGE CARD COUNT
