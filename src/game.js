@@ -4,10 +4,8 @@ class Game {
     this.initializeStorage();
 
     const cards = this.shuffleCards(this.createCards());
-    const player1 = new Player('Player 1');
-    const player2 = new Player('Player 2');
-    player1.hand = this.dealPlayerDecks(cards)[0];
-    player2.hand = this.dealPlayerDecks(cards)[1];
+    const player1 = new Player('Player 1', this.dealPlayerDecks(cards)[0]);
+    const player2 = new Player('Player 2', this.dealPlayerDecks(cards)[1]);
     return new Game(player1, player2, cards);
   }
 

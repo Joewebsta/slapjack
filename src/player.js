@@ -1,11 +1,10 @@
 class Player {
   
-  constructor(name) {
+  constructor(name, cards) {
     this.name = name;
     this.id = Date.now();
-    // this.wins = 0;
     this.wins = +JSON.parse(localStorage.getItem('wins'))[this.name];
-    this.hand = [];
+    this.hand = cards;
     this.lastAction = '';
   }
 
