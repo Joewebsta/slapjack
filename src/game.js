@@ -3,9 +3,11 @@ class Game {
   static initializeGame() {
     this.initializeStorage();
 
-    const cards = this.createCards();
+    const cards = this.shuffleCards(this.createCards());
     const player1 = new Player('Player 1');
     const player2 = new Player('Player 2');
+    player1.hand = this.dealPlayerDecks(cards)[0];
+    player2.hand = this.dealPlayerDecks(cards)[1];
     return new Game(player1, player2, cards);
   }
 
@@ -17,6 +19,24 @@ class Game {
       cardArr.push(new Card(color, value, `../assets/${cardFileName}`));
       return cardArr;
     }, []);
+  }
+
+  static dealPlayerDecks(cards) {
+    const midCardIdx = (cards.length / 2);
+    const p1Cards = cards.slice(0, midCardIdx);
+    const p2Cards = cards.slice(midCardIdx);
+    return [p1Cards, p2Cards];
+  }
+
+  static shuffleCards(cards) {
+    const shuffledCards = [];
+    while (cards.length) {
+      const randIdx = Math.floor(Math.random() * cards.length);
+      shuffledCards.push(cards[randIdx]);
+      cards.splice(randIdx, 1);
+    }
+
+    return shuffledCards;
   }
   
   static initializeStorage() {

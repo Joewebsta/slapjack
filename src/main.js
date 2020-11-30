@@ -16,7 +16,6 @@ const p2Wins = document.querySelector('.js-p2-wins');
 // || INITIALIZE GAME
 
 const game = Game.initializeGame();
-game.dealPlayerDecks();
 
 // || EVENT LISTENERS
 
