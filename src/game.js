@@ -1,6 +1,8 @@
 class Game {
 
   static initializeGame() {
+    this.initializeStorage();
+
     const cards = this.createCards();
     const player1 = new Player('Player 1');
     const player2 = new Player('Player 2');
@@ -16,6 +18,14 @@ class Game {
       return cardArr;
     }, []);
   }
+  
+  static initializeStorage() {
+    const wins = { 'Player 1' : 0, 'Player 2' : 0 };
+
+    if (!localStorage.getItem('wins')) {
+      localStorage.setItem('wins', JSON.stringify(wins));
+    }
+  }
 
   constructor(player1, player2, cards) {
     this.player1 = player1;
@@ -23,6 +33,8 @@ class Game {
     this.cards = this.shuffleCards(cards);
     this.centralPile = [];
     this.currentPlayerTurn = this.player1;
+
+    this.initializeStorage();
   }
 
   shuffleCards(cards) {
@@ -37,7 +49,6 @@ class Game {
   }
 
   dealPlayerDecks() {
-    console.log('Deal player decks!');
     const midCardIdx = (this.cards.length / 2);
     this.player1.hand = this.cards.slice(0, midCardIdx);
     this.player2.hand = this.cards.slice(midCardIdx);
@@ -134,7 +145,8 @@ class Game {
     if (this.isJack()) {
       console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
       this.resetGame();
-      this.updateWins(activePlayer);
+      activePlayer.updateWins();
+      activePlayer.saveWinsToStorage();
       gameOver(activePlayer, opponent, 'Game over');
       return;
     }
@@ -149,7 +161,8 @@ class Game {
     if (this.isDouble() || this.isSandwich()) {
       console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
       this.resetGame();
-      this.updateWins(opponent);
+      opponent.updateWins();
+      opponent.saveWinsToStorage();
       gameOver(activePlayer, opponent, 'Game over illegal');
       return;
     }
@@ -175,7 +188,8 @@ class Game {
     if (!activePlayer.hasCards()) {
       console.log(`Game over ${activePlayer.name} loses!`);
       this.resetGame();
-      this.updateWins(opponent);
+      opponent.updateWins();
+      opponent.saveWinsToStorage();
       gameOver(activePlayer, opponent, 'Game over illegal');
       return;
     }
@@ -239,28 +253,14 @@ class Game {
     }
   }
 
-  // UPDATE PLAYER WINS
-  updateWins(player) {
-    player.wins += 1;
-  }
+  // INITIALIZE STORAGE
 
   initializeStorage() {    
-    const wins = {
-      'p1' : 0,
-      'p2' : 0
-    }
-    localStorage.setItem('wins', JSON.stringify(wins));
-  }
+    const wins = { 'Player 1' : 0, 'Player 2' : 0 };
 
-  saveWinsToStorage() {
     if (!localStorage.getItem('wins')) {
-      this.initializeStorage();
+      localStorage.setItem('wins', JSON.stringify(wins));
     }
-
-    
-    // If wins object does not exist, initialzie wins object
-    // find player who won and update object
-
   }
 
   // || UTILITIES

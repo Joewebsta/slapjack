@@ -3,7 +3,8 @@ class Player {
   constructor(name) {
     this.name = name;
     this.id = Date.now();
-    this.wins = 0;
+    // this.wins = 0;
+    this.wins = +JSON.parse(localStorage.getItem('wins'))[this.name];
     this.hand = [];
     this.lastAction = '';
   }
@@ -20,7 +21,17 @@ class Player {
     return this.hand.length;
   }
 
-  saveWinsToStorage() {
+  updateWins() {
+    this.wins += 1;
+  }
+  
+  retreiveStorage() {
+    return JSON.parse(localStorage.getItem('wins'));
+  }
 
+  saveWinsToStorage() {
+    const winsObj = this.retreiveStorage();
+    winsObj[this.name] = this.wins;
+    localStorage.setItem('wins', JSON.stringify(winsObj));
   }
 }
