@@ -244,6 +244,25 @@ class Game {
     player.wins += 1;
   }
 
+  initializeStorage() {    
+    const wins = {
+      'p1' : 0,
+      'p2' : 0
+    }
+    localStorage.setItem('wins', JSON.stringify(wins));
+  }
+
+  saveWinsToStorage() {
+    if (!localStorage.getItem('wins')) {
+      this.initializeStorage();
+    }
+
+    
+    // If wins object does not exist, initialzie wins object
+    // find player who won and update object
+
+  }
+
   // || UTILITIES
   
   resetCentralPile() {
