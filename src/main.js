@@ -10,7 +10,8 @@ const centralCardCount = document.querySelector('.js-central-card-count');
 const p1CardEmptyState = document.querySelector('.js-p1-card-empty');
 const p2CardEmptyState = document.querySelector('.js-p2-card-empty');
 const centralCardEmptyState = document.querySelector('.js-central-card-empty');
-
+const p1Wins = document.querySelector('.js-p1-wins');
+const p2Wins = document.querySelector('.js-p2-wins');
 
 // || INITIALIZE GAME
 
@@ -22,6 +23,8 @@ game.dealPlayerDecks();
 window.addEventListener('keypress', function(e) {
   game.handlePlayerActions(e);
 }.bind(game), false);
+
+window.addEventListener('load', loadWinCounts);
 
 // || DEAL CARD
 
@@ -187,6 +190,13 @@ function updateCardEmptyState(activePlayer, centralPile) {
   } else {
     centralCardEmptyState.hidden = false;
   }
+}
+
+// WIN COUNTS
+function loadWinCounts() {
+  const winObj = JSON.parse(localStorage.getItem('wins'));
+  p1Wins.textContent = winObj['Player 1'];
+  p2Wins.textContent = winObj['Player 2'];
 }
 
 // || HELPERS
