@@ -60,3 +60,7 @@ header h1 {
 .card .p2-hand {
   border: 2px solid blue;       
 }
+
+.wins {
+  display: inline-block;
+}

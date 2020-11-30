@@ -24,7 +24,7 @@ window.addEventListener('keypress', function(e) {
   game.handlePlayerActions(e);
 }.bind(game), false);
 
-window.addEventListener('load', loadWinCounts);
+window.addEventListener('load', updateWinCounts);
 
 // || DEAL CARD
 
@@ -93,10 +93,11 @@ function badSlap(activePlayer, opponent) {
 
 function gameOver(activePlayer, opponent, type) {
   updateHeaderMsg(type, activePlayer.name, opponent.name);
+  updatePlayerWinCount();
   clearCentralCard();
+  resetCentralCardEmptyState();
   resetCardCounts();
   resetPlayerCardStates();
-  resetCentralCardEmptyState();
   resetHeaderMsg();
   // Update win count - local storage
 }
@@ -122,6 +123,10 @@ function resetHeaderMsg() {
   setTimeout(() => { 
     headerMsg.textContent = `Slap Jack!`;
   }, 3000);
+}
+
+function updatePlayerWinCount() {
+  updateWinCounts();
 }
 
 // || MANAGE CARD COUNT
@@ -193,7 +198,7 @@ function updateCardEmptyState(activePlayer, centralPile) {
 }
 
 // WIN COUNTS
-function loadWinCounts() {
+function updateWinCounts() {
   const winObj = JSON.parse(localStorage.getItem('wins'));
   p1Wins.textContent = winObj['Player 1'];
   p2Wins.textContent = winObj['Player 2'];

@@ -225,8 +225,8 @@ class Game {
   }
 
   resetGame() {
-    game.cards = game.shuffleCards(game.cards);
-    game.dealPlayerDecks();
+    this.cards = this.shuffleCards(this.cards);
+    this.dealPlayerDecks();
     this.resetCentralPile();
     this.currentPlayerTurn = this.player1;
   }
