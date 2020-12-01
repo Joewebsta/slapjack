@@ -1,5 +1,7 @@
 class Game {
 
+  // CLASS METHODS
+
   static initializeGame() {
     this.initializeStorage();
 
@@ -42,32 +44,23 @@ class Game {
     }
   }
 
+  // INSTANCE METHODS
+
   constructor(player1, player2, cards) {
     this.player1 = player1;
     this.player2 = player2;
-    this.cards = this.shuffleCards(cards);
+    this.cards = cards;
     this.centralPile = [];
     this.currentPlayerTurn = this.player1;
     this.activePlayer = '';
     this.opponent = '';
   }
 
-  shuffleCards(cards) {
-    const shuffledCards = [];
-    while (cards.length) {
-      const randIdx = Math.floor(Math.random() * cards.length);
-      shuffledCards.push(cards[randIdx]);
-      cards.splice(randIdx, 1);
-    }
-
-    return shuffledCards;
-  }
-
-  // || PLAYER ACTIONS
+  // || DETERMINE DEAL OR SLAP
 
   handlePlayerActions(e) {      
     this.activePlayer = this.determineActivePlayer(e);
-    this.opponent = this.playerOpponent(this.activePlayer);
+    this.opponent = this.determineOpponent(this.activePlayer);
     
     if (this.isPlayerDeal(e)) {
       this.handlePlayerDeal();
@@ -78,36 +71,20 @@ class Game {
     }
   }
 
-  playerOpponent(player) {
-    return player === this.player1 ? this.player2 : this.player1;
-  }
-
-  determineActivePlayer(e) {
-    if (e.key === 'q' || e.key === 'f') return this.player1;
-    if (e.key === 'p' || e.key === 'j') return this.player2;
-  }
-
-  isPlayerDeal(e) {
-    return (e.key === 'q' || e.key === 'p');
-  }
-
-  isPlayerSlap(e) {
-    return (e.key === 'f' || e.key === 'j');
-  } 
-
   // || DEAL CARD
 
   handlePlayerDeal() {
     if (!this.activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
     if (!this.activePlayer.hasCards()) return;
-
+    
     this.dealCard();
+    this.updateCurrentPlayerTurn();
+    
+    dealCard(this.centralPile, this.activePlayer);
   }
 
   dealCard() {
     this.centralPile.unshift(this.activePlayer.playCard());
-    this.updateCurrentPlayerTurn(this.activePlayer, this.opponent);
-    dealCard(this.centralPile, this.activePlayer);
 
     console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
@@ -204,7 +181,7 @@ class Game {
 
   slap(type) {
     this.collectCentralPile(this.activePlayer);  
-    this.updateCurrentPlayerTurn(this.activePlayer, this.opponent);
+    this.updateCurrentPlayerTurn();
     this.resetCentralPile();
 
     slapCard(type, this.activePlayer, this.centralPile);
@@ -252,4 +229,34 @@ class Game {
   resetCentralPile() {
     this.centralPile = [];
   }
+
+  shuffleCards(cards) {
+    const shuffledCards = [];
+    while (cards.length) {
+      const randIdx = Math.floor(Math.random() * cards.length);
+      shuffledCards.push(cards[randIdx]);
+      cards.splice(randIdx, 1);
+    }
+
+    return shuffledCards;
+  }
+
+  // || HELPERS
+
+  determineActivePlayer(e) {
+    if (e.key === 'q' || e.key === 'f') return this.player1;
+    if (e.key === 'p' || e.key === 'j') return this.player2;
+  }
+  
+  determineOpponent() {
+    return this.activePlayer === this.player1 ? this.player2 : this.player1;
+  }
+
+  isPlayerDeal(e) {
+    return (e.key === 'q' || e.key === 'p');
+  }
+
+  isPlayerSlap(e) {
+    return (e.key === 'f' || e.key === 'j');
+  } 
 }
