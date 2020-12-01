@@ -1,13 +1,13 @@
 *{
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;  
 }
 
 *, *:before, *:after {
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 body {
+  font-family: 'Inter', sans-serif;
   margin: 0;
   background: #eee;
 }
@@ -37,29 +37,49 @@ header h1 {
   /* border: 2px solid teal; */
   display: grid;
   justify-items: center; 
+  grid-template-rows: 406px auto auto;
+  gap: 20px;
+  font-size: 18px;
 }
 
 .card-empty {
-  border: 2px dashed teal;
+  border: 3px dashed #969696;
   height: 406px;
-  width: 234px;
+  width: 240px;
   border-radius: 8px;
 }
-
 
 .card img {
   height: 406px;
   min-height: 406px;
-  min-width: 234px;
+  min-width: 240px;
   border-radius: 8px;
 }
 
 .card .p1-hand {
-  border: 2px solid red;
+  border: 3px solid #0B95FC;
 }
 
 .card .p2-hand {
-  border: 2px solid blue;       
+  border: 3px solid #FF539D;       
+}
+
+.card-count {
+  background: #969696;
+  padding: 10px;
+  border-radius: 8px;
+  width: 240px;
+  text-align: center;
+  color: white;
+  height: 42px;
+}
+
+.p1-card-count {
+  background-color: #0B95FC;
+}
+
+.p2-card-count {
+  background-color: #FF539D;
 }
 
 .wins {
