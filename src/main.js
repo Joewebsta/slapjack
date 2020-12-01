@@ -15,7 +15,7 @@ const p2Wins = document.querySelector('.js-p2-wins');
 
 // || INITIALIZE GAME
 
-const game = Game.initializeGame();
+let game = Game.initializeGame();
 
 // || EVENT LISTENERS
 
@@ -98,6 +98,7 @@ function gameOver(activePlayer, opponent, type) {
   resetCardCounts();
   resetPlayerCardStates();
   resetHeaderMsg();
+  game = Game.initializeGame();
   // Update win count - local storage
 }
 
