@@ -3,8 +3,6 @@ class Game {
   static initializeGame() {
     this.initializeStorage();
 
-    console.log('Initialize game!');
-
     const cards = this.shuffleCards(this.createCards());
     const player1 = new Player('Player 1', this.dealPlayerDecks(cards)[0]);
     const player2 = new Player('Player 2', this.dealPlayerDecks(cards)[1]);
@@ -14,9 +12,8 @@ class Game {
   static createCards() {
     return cardImgSrc.reduce((cardArr, cardFileName) => {
       const cardProps = cardFileName.substr(0, cardFileName.length - 4).split('-');
-      const color = cardProps[0];
       const value = cardProps[1];
-      cardArr.push(new Card(color, value, `../assets/${cardFileName}`));
+      cardArr.push(new Card(value, `../assets/${cardFileName}`));
       return cardArr;
     }, []);
   }
