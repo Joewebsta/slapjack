@@ -2,10 +2,8 @@ class Player {
   
   constructor(name, cards) {
     this.name = name;
-    this.id = Date.now();
-    this.wins = +JSON.parse(localStorage.getItem('wins'))[this.name];
     this.hand = cards;
-    this.lastAction = '';
+    this.wins = this.retreivePlayerWins();
   }
 
   playCard() {
@@ -23,14 +21,18 @@ class Player {
   updateWins() {
     this.wins += 1;
   }
+    
+  saveWinsToStorage() {
+    const winsObj = this.retreiveStorage();
+    winsObj[this.name] = this.wins;
+    localStorage.setItem('wins', JSON.stringify(winsObj));
+  }
   
   retreiveStorage() {
     return JSON.parse(localStorage.getItem('wins'));
   }
 
-  saveWinsToStorage() {
-    const winsObj = this.retreiveStorage();
-    winsObj[this.name] = this.wins;
-    localStorage.setItem('wins', JSON.stringify(winsObj));
+  retreivePlayerWins() {
+    return +this.retreiveStorage()[this.name];
   }
 }
