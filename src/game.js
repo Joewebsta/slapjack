@@ -48,8 +48,8 @@ class Game {
     this.cards = this.shuffleCards(cards);
     this.centralPile = [];
     this.currentPlayerTurn = this.player1;
-
-    this.initializeStorage();
+    this.activePlayer = '';
+    this.opponent = '';
   }
 
   shuffleCards(cards) {
@@ -65,16 +65,16 @@ class Game {
 
   // || PLAYER ACTIONS
 
-  handlePlayerActions(e) {  
-    const activePlayer = this.activePlayer(e);
-    const opponent = this.playerOpponent(activePlayer);
+  handlePlayerActions(e) {      
+    this.activePlayer = this.determineActivePlayer(e);
+    this.opponent = this.playerOpponent(this.activePlayer);
     
     if (this.isPlayerDeal(e)) {
-      this.handlePlayerDeal(activePlayer, opponent);
+      this.handlePlayerDeal();
     }
     
     if (this.isPlayerSlap(e)) {
-      this.handlePlayerSlap(activePlayer, opponent);
+      this.handlePlayerSlap();
     }
   }
 
@@ -82,7 +82,7 @@ class Game {
     return player === this.player1 ? this.player2 : this.player1;
   }
 
-  activePlayer(e) {
+  determineActivePlayer(e) {
     if (e.key === 'q' || e.key === 'f') return this.player1;
     if (e.key === 'p' || e.key === 'j') return this.player2;
   }
@@ -97,137 +97,134 @@ class Game {
 
   // || DEAL CARD
 
-  handlePlayerDeal(activePlayer, opponent) {
-    if (!activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
-    if (!activePlayer.hasCards()) return;
+  handlePlayerDeal() {
+    if (!this.activePlayer.isPlayerTurn(this.currentPlayerTurn)) return;
+    if (!this.activePlayer.hasCards()) return;
 
-    this.dealCard(activePlayer, opponent);
+    this.dealCard();
   }
 
-  dealCard(activePlayer, opponent) {
-    this.centralPile.unshift(activePlayer.playCard());
-    this.updateCurrentPlayerTurn(activePlayer, opponent);
-    dealCard(this.centralPile, activePlayer);
+  dealCard() {
+    this.centralPile.unshift(this.activePlayer.playCard());
+    this.updateCurrentPlayerTurn(this.activePlayer, this.opponent);
+    dealCard(this.centralPile, this.activePlayer);
 
     console.log(`${this.centralPile[0].value} -- Player 1 cards: ${this.player1.hand.length}. -- Player 2 cards: ${this.player2.hand.length}.`);
   }
 
   // || SLAP CARD
 
-  handlePlayerSlap(activePlayer, opponent) {
+  handlePlayerSlap() {
     if (!this.centralPile.length) return;
     
     if (this.isIllegalSlap()) {
-      this.handleIllegalSlap(activePlayer, opponent);
+      this.handleIllegalSlap(this.activePlayer, this.opponent);
       return;
     }
 
-    this.handleLegalSlap(activePlayer, opponent);
+    this.handleLegalSlap();
   }
 
-  handleLegalSlap(activePlayer, opponent) {
+  handleLegalSlap() {
     
-    if (activePlayer.hasCards() && !opponent.hasCards()) {
-     this.slapScenario1(activePlayer, opponent);
+    if (this.activePlayer.hasCards() && !this.opponent.hasCards()) {
+     this.slapScenario1(this.activePlayer, this.opponent);
      return;
     }
     
-    if (!activePlayer.hasCards() && opponent.hasCards()) {
-      this.slapScenario2(activePlayer, opponent); 
+    if (!this.activePlayer.hasCards() && this.opponent.hasCards()) {
+      this.slapScenario2(this.activePlayer, this.opponent); 
       return;
     }
     
-    this.slapScenario3(activePlayer, opponent);
+    this.slapScenario3();
   }
 
-  slapScenario1(activePlayer, opponent) {
+  slapScenario1() {
     if (this.isDouble()) {
-      this.slap(activePlayer, opponent, 'Double');
+      this.slap('Double');
       return;
     }
     
     if (this.isSandwich()) {
-      this.slap(activePlayer, opponent, 'Sandwich');
+      this.slap('Sandwich');
       return;
     }
 
     if (this.isJack()) {
-      console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
-      activePlayer.updateWins();
-      activePlayer.saveWinsToStorage();
-      gameOver(activePlayer, opponent, 'Game over');
+      console.log(`Game over - ${this.activePlayer.name} wins - ${this.opponent.name} loses!`);
+      this.activePlayer.updateWins();
+      this.activePlayer.saveWinsToStorage();
+      gameOver(this.activePlayer, this.opponent, 'Game over');
       return;
     }
   }
   
-  slapScenario2(activePlayer, opponent) {
+  slapScenario2() {
     if (this.isJack()) {
-      this.slap(activePlayer, opponent, 'Slap Jack');
+      this.slap('Slap Jack');
       return;
     }
 
     if (this.isDouble() || this.isSandwich()) {
-      console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
-      opponent.updateWins();
-      opponent.saveWinsToStorage();
-      gameOver(activePlayer, opponent, 'Game over illegal');
+      console.log(`Game over - ${this.opponent.name} wins - ${this.activePlayer.name} loses!`);
+      this.opponent.updateWins();
+      this.opponent.saveWinsToStorage();
+      gameOver(this.activePlayer, this.opponent, 'Game over illegal');
       return;
     }
   }
 
-  slapScenario3(activePlayer, opponent) {
+  slapScenario3() {
     if (this.isJack()) {
-      this.slap(activePlayer, opponent, 'Slap Jack');
+      this.slap('Slap Jack');
     }
     
     if (this.isDouble()) {
-      this.slap(activePlayer, opponent, 'Double');
+      this.slap('Double');
     }
 
     if (this.isSandwich()) {
-      this.slap(activePlayer, opponent, 'Sandwich');
+      this.slap('Sandwich');
     }
   }
 
-  handleIllegalSlap(activePlayer, opponent) {
-    // console.log('Illegal slap!');
-    
-    if (!activePlayer.hasCards()) {
-      console.log(`Game over ${activePlayer.name} loses!`);
-      opponent.updateWins();
-      opponent.saveWinsToStorage();
-      gameOver(activePlayer, opponent, 'Game over illegal');
+  handleIllegalSlap() {
+    if (!this.activePlayer.hasCards()) {
+      console.log(`Game over ${this.activePlayer.name} loses!`);
+      this.opponent.updateWins();
+      this.opponent.saveWinsToStorage();
+      gameOver(this.activePlayer, this.opponent, 'Game over illegal');
       return;
     }
 
-    this.transferCardToOpponent(activePlayer, opponent);
-    badSlap(activePlayer, opponent);
+    this.transferCardToOpponent();
+    badSlap(this.activePlayer, this.opponent);
   }
 
-  slap(activePlayer, opponent, type) {
-    this.collectCentralPile(activePlayer);  
-    this.updateCurrentPlayerTurn(activePlayer, opponent);
+  slap(type) {
+    this.collectCentralPile(this.activePlayer);  
+    this.updateCurrentPlayerTurn(this.activePlayer, this.opponent);
     this.resetCentralPile();
 
-    slapCard(type, activePlayer, this.centralPile);
-    // console.log(`${activePlayer.name} legal and succesful slap!`);
+    slapCard(type, this.activePlayer, this.centralPile);
   }
 
 // || SLAP OUTCOMES
 
-  transferCardToOpponent(activePlayer, opponent) {
-    opponent.hand.push(activePlayer.hand.shift());
-    this.updateCurrentPlayerTurn(activePlayer, opponent);
+  transferCardToOpponent() {
+    this.opponent.hand.push(this.activePlayer.hand.shift());
+    this.updateCurrentPlayerTurn();
   }
 
-  collectCentralPile(activePlayer) {
-    activePlayer.hand = activePlayer.hand.concat(this.centralPile);
-    activePlayer.hand = this.shuffleCards(activePlayer.hand);
+  collectCentralPile() {
+    this.activePlayer.hand = this.activePlayer.hand.concat(this.centralPile);
+    this.activePlayer.hand = this.shuffleCards(this.activePlayer.hand);
   }
 
-  updateCurrentPlayerTurn(activePlayer, opponent) {
-    if (!opponent.hasCards()) return;
-    this.currentPlayerTurn = (activePlayer === this.player1 ? this.player2 : this.player1);
+  updateCurrentPlayerTurn() {
+    if (!this.opponent.hasCards()) return;
+    this.currentPlayerTurn = (this.activePlayer === this.player1 ? this.player2 : this.player1);
   }
 
   // || SLAP CONDITIONALS
@@ -251,18 +248,6 @@ class Game {
       return this.centralPile[0].value === this.centralPile[2].value;
     }
   }
-
-  // INITIALIZE STORAGE
-
-  initializeStorage() {    
-    const wins = { 'Player 1' : 0, 'Player 2' : 0 };
-
-    if (!localStorage.getItem('wins')) {
-      localStorage.setItem('wins', JSON.stringify(wins));
-    }
-  }
-
-  // || UTILITIES
   
   resetCentralPile() {
     this.centralPile = [];
