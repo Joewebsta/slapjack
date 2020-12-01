@@ -19,9 +19,8 @@ class Game {
   }
 
   static dealPlayerDecks(cards) {
-    const midCardIdx = (cards.length / 2);
-    const p1Cards = cards.slice(0, midCardIdx);
-    const p2Cards = cards.slice(midCardIdx);
+    const p1Cards = cards.slice(0, 26);
+    const p2Cards = cards.slice(26);
     return [p1Cards, p2Cards];
   }
 
@@ -62,12 +61,6 @@ class Game {
     }
 
     return shuffledCards;
-  }
-
-  dealPlayerDecks() {
-    const midCardIdx = (this.cards.length / 2);
-    this.player1.hand = this.cards.slice(0, midCardIdx);
-    this.player2.hand = this.cards.slice(midCardIdx);
   }
 
   // || PLAYER ACTIONS
