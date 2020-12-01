@@ -3,6 +3,8 @@ class Game {
   static initializeGame() {
     this.initializeStorage();
 
+    console.log('Initialize game!');
+
     const cards = this.shuffleCards(this.createCards());
     const player1 = new Player('Player 1', this.dealPlayerDecks(cards)[0]);
     const player2 = new Player('Player 2', this.dealPlayerDecks(cards)[1]);
@@ -37,10 +39,9 @@ class Game {
     return shuffledCards;
   }
   
-  static initializeStorage() {
-    const wins = { 'Player 1' : 0, 'Player 2' : 0 };
-
+  static initializeStorage() {    
     if (!localStorage.getItem('wins')) {
+      const wins = { 'Player 1' : 0, 'Player 2' : 0 };
       localStorage.setItem('wins', JSON.stringify(wins));
     }
   }
@@ -162,7 +163,6 @@ class Game {
 
     if (this.isJack()) {
       console.log(`Game over - ${activePlayer.name} wins - ${opponent.name} loses!`);
-      this.resetGame();
       activePlayer.updateWins();
       activePlayer.saveWinsToStorage();
       gameOver(activePlayer, opponent, 'Game over');
@@ -178,7 +178,6 @@ class Game {
 
     if (this.isDouble() || this.isSandwich()) {
       console.log(`Game over - ${opponent.name} wins - ${activePlayer.name} loses!`);
-      this.resetGame();
       opponent.updateWins();
       opponent.saveWinsToStorage();
       gameOver(activePlayer, opponent, 'Game over illegal');
@@ -205,7 +204,6 @@ class Game {
     
     if (!activePlayer.hasCards()) {
       console.log(`Game over ${activePlayer.name} loses!`);
-      this.resetGame();
       opponent.updateWins();
       opponent.saveWinsToStorage();
       gameOver(activePlayer, opponent, 'Game over illegal');
@@ -240,13 +238,6 @@ class Game {
   updateCurrentPlayerTurn(activePlayer, opponent) {
     if (!opponent.hasCards()) return;
     this.currentPlayerTurn = (activePlayer === this.player1 ? this.player2 : this.player1);
-  }
-
-  resetGame() {
-    this.cards = this.shuffleCards(this.cards);
-    this.dealPlayerDecks();
-    this.resetCentralPile();
-    this.currentPlayerTurn = this.player1;
   }
 
   // || SLAP CONDITIONALS
