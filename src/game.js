@@ -94,27 +94,17 @@ class Game {
   handlePlayerSlap() {
     if (!this.centralPile.length) return;
     
-    if (this.isIllegalSlap()) {
-      this.handleIllegalSlap(this.activePlayer, this.opponent);
-      return;
-    }
-
-    this.handleLegalSlap();
-  }
-
-  handleLegalSlap() {
-    
     if (this.activePlayer.hasCards() && !this.opponent.hasCards()) {
-     this.slapScenario1(this.activePlayer, this.opponent);
-     return;
-    }
-    
-    if (!this.activePlayer.hasCards() && this.opponent.hasCards()) {
-      this.slapScenario2(this.activePlayer, this.opponent); 
+      this.slapScenario1();
       return;
-    }
-    
-    this.slapScenario3();
+     }
+     
+     if (!this.activePlayer.hasCards() && this.opponent.hasCards()) {
+       this.slapScenario2(); 
+       return;
+     }
+     
+     this.slapScenario3();
   }
 
   slapScenario1() {
@@ -129,10 +119,12 @@ class Game {
     }
 
     if (this.isJack()) {
-      console.log(`Game over - ${this.activePlayer.name} wins - ${this.opponent.name} loses!`);
       this.activePlayer.updateWins();
       this.activePlayer.saveWinsToStorage();
+      
       gameOver(this.activePlayer, this.opponent, 'Game over');
+      
+      console.log(`Game over - ${this.activePlayer.name} wins - ${this.opponent.name} loses!`);
       return;
     }
   }
@@ -143,16 +135,24 @@ class Game {
       return;
     }
 
-    if (this.isDouble() || this.isSandwich()) {
-      console.log(`Game over - ${this.opponent.name} wins - ${this.activePlayer.name} loses!`);
+    if (!this.isJack()) {
       this.opponent.updateWins();
       this.opponent.saveWinsToStorage();
+      
       gameOver(this.activePlayer, this.opponent, 'Game over illegal');
-      return;
+      
+      console.log(`Game over - ${this.opponent.name} wins - ${this.activePlayer.name} loses!`);
     }
   }
 
   slapScenario3() {
+    if (this.isBadSlap()) {
+      this.transferCardToOpponent();
+      
+      badSlap(this.activePlayer, this.opponent);
+      return;
+    }
+
     if (this.isJack()) {
       this.slap('Slap Jack');
     }
@@ -166,19 +166,6 @@ class Game {
     }
   }
 
-  handleIllegalSlap() {
-    if (!this.activePlayer.hasCards()) {
-      console.log(`Game over ${this.activePlayer.name} loses!`);
-      this.opponent.updateWins();
-      this.opponent.saveWinsToStorage();
-      gameOver(this.activePlayer, this.opponent, 'Game over illegal');
-      return;
-    }
-
-    this.transferCardToOpponent();
-    badSlap(this.activePlayer, this.opponent);
-  }
-
   slap(type) {
     this.collectCentralPile(this.activePlayer);  
     this.updateCurrentPlayerTurn();
@@ -186,8 +173,6 @@ class Game {
 
     slapCard(type, this.activePlayer, this.centralPile);
   }
-
-// || SLAP OUTCOMES
 
   transferCardToOpponent() {
     this.opponent.hand.push(this.activePlayer.hand.shift());
@@ -203,10 +188,27 @@ class Game {
     if (!this.opponent.hasCards()) return;
     this.currentPlayerTurn = (this.activePlayer === this.player1 ? this.player2 : this.player1);
   }
+  
+  // || HELPERS
 
-  // || SLAP CONDITIONALS
+  determineActivePlayer(e) {
+    if (e.key === 'q' || e.key === 'f') return this.player1;
+    if (e.key === 'p' || e.key === 'j') return this.player2;
+  }
+  
+  determineOpponent() {
+    return this.activePlayer === this.player1 ? this.player2 : this.player1;
+  }
 
-  isIllegalSlap() {
+  isPlayerDeal(e) {
+    return (e.key === 'q' || e.key === 'p');
+  }
+
+  isPlayerSlap(e) {
+    return (e.key === 'f' || e.key === 'j');
+  }
+  
+  isBadSlap() {
     return !this.isJack() && !this.isDouble() && !this.isSandwich();
   }
 
@@ -240,23 +242,4 @@ class Game {
 
     return shuffledCards;
   }
-
-  // || HELPERS
-
-  determineActivePlayer(e) {
-    if (e.key === 'q' || e.key === 'f') return this.player1;
-    if (e.key === 'p' || e.key === 'j') return this.player2;
-  }
-  
-  determineOpponent() {
-    return this.activePlayer === this.player1 ? this.player2 : this.player1;
-  }
-
-  isPlayerDeal(e) {
-    return (e.key === 'q' || e.key === 'p');
-  }
-
-  isPlayerSlap(e) {
-    return (e.key === 'f' || e.key === 'j');
-  } 
 }
