@@ -2,14 +2,14 @@
 
 const headerMsg = document.querySelector('.js-header-message');
 const centralCard = document.querySelector('.js-central-card');
+const centralCardCount = document.querySelector('.js-central-card-count');
+const centralCardEmptyState = document.querySelector('.js-central-card-empty');
 const p1Hand = document.querySelector('.js-p1-hand');
 const p2Hand = document.querySelector('.js-p2-hand');
 const p1CardCount = document.querySelector('.js-p1-card-count');
 const p2CardCount = document.querySelector('.js-p2-card-count');
-const centralCardCount = document.querySelector('.js-central-card-count');
 const p1CardEmptyState = document.querySelector('.js-p1-card-empty');
 const p2CardEmptyState = document.querySelector('.js-p2-card-empty');
-const centralCardEmptyState = document.querySelector('.js-central-card-empty');
 const p1Wins = document.querySelector('.js-p1-wins');
 const p2Wins = document.querySelector('.js-p2-wins');
 
@@ -33,37 +33,39 @@ function dealCard(centralPile, activePlayer) {
 
   clearHeaderMsg();
   
-  if (!centralCardImg) {
-    createFirstCard(cardSrc, activePlayer, centralPile);
-  } else {
-    updateCentralCardSrc(cardSrc, centralCardImg);
-    updateCentralCardBorder(activePlayer.name, centralCardImg);
-    updateCardCount(activePlayer, centralPile);
-  }
+  if (centralCardImg) {
+    updatePlayerCardEmptyState(activePlayer);
+    updateCentralCard(cardSrc, centralCardImg);
+    updateCentralCardBorder(activePlayer, centralCardImg);
+    updateCentralCardEmptyState(centralPile);
+    updateCardCounts(activePlayer, centralPile);
+    return;
+  } 
   
-  updateCardEmptyState(activePlayer, centralPile); 
+  updateCentralCardEmptyState(centralPile);
+  createFirstCentralCard(cardSrc, activePlayer, centralPile);
 }
 
-function createFirstCard(cardSrc, activePlayer, centralPile) {
-  createCentralCardImg(cardSrc, activePlayer.name);
-  updateCardCount(activePlayer, centralPile);
+function createFirstCentralCard(cardSrc, activePlayer, centralPile) {
+  createCentralCardImg(cardSrc, activePlayer);
+  updateCardCounts(activePlayer, centralPile);
 }
 
-function createCentralCardImg(src, playerName) {
-  const playerBorder = isPlayer1(playerName) ? 'p1-hand' : 'p2-hand';
+function createCentralCardImg(src, activePlayer) {
+  const playerBorder = isPlayer1(activePlayer) ? 'p1-hand' : 'p2-hand';
   const cardImgHTML = `<img class="js-central-card-img ${playerBorder}" src="${src}" alt="">`;
   
   centralCard.insertAdjacentHTML('afterbegin', cardImgHTML);
 }
 
-function updateCentralCardSrc(cardSrc, centralCardImg) {
+function updateCentralCard(cardSrc, centralCardImg) {
   centralCardImg.src = cardSrc;
 }
 
-function updateCentralCardBorder(playerName, img) {
+function updateCentralCardBorder(activePlayer, img) {
   if (!img) return;
   
-  if (isPlayer1(playerName)) {
+  if (isPlayer1(activePlayer)) {
     img.classList.add('p1-hand');
     img.classList.remove('p2-hand');
   } else {
@@ -75,11 +77,11 @@ function updateCentralCardBorder(playerName, img) {
 // || SLAP CARD
 
 function slapCard(type, activePlayer, centralPile) {
-  console.log(type);
   updateHeaderMsg(type, activePlayer.name);
-  updateCardCount(activePlayer, centralPile);
   clearCentralCard();
-  updateCardEmptyState(activePlayer, centralPile); 
+  updateCentralCardEmptyState(centralPile);
+  updatePlayerCardEmptyState(activePlayer);
+  updateCardCounts(activePlayer, centralPile);
 }
 
 function badSlap(activePlayer, opponent) {
@@ -92,14 +94,17 @@ function badSlap(activePlayer, opponent) {
 
 function gameOver(activePlayer, opponent, type) {
   updateHeaderMsg(type, activePlayer.name, opponent.name);
-  updatePlayerWinCount();
+  updateWinCounts();
   clearCentralCard();
+  resetGame();
+}
+
+function resetGame() {
   resetCentralCardEmptyState();
   resetCardCounts();
   resetPlayerCardStates();
   resetHeaderMsg();
   game = Game.initializeGame();
-  // Update win count - local storage
 }
 
 function resetCardCounts() {
@@ -126,15 +131,15 @@ function resetHeaderMsg() {
 }
 
 function updatePlayerWinCount() {
-  updateWinCounts();
+  
 }
 
 // || MANAGE CARD COUNT
 
-function updateCardCount(activePlayer, centralPile) {
+function updateCardCounts(activePlayer, centralPile) {
   centralCardCount.textContent = centralPile.length;
 
-  if (isPlayer1(activePlayer.name)) {
+  if (isPlayer1(activePlayer)) {
     p1CardCount.textContent = activePlayer.hand.length;
     return;
   }
@@ -143,7 +148,7 @@ function updateCardCount(activePlayer, centralPile) {
 }
 
 function updateCardCountBadSlap(activePlayer, opponent) {
-  if (isPlayer1(activePlayer.name)) {
+  if (isPlayer1(activePlayer)) {
     p1CardCount.textContent = activePlayer.hand.length;
     p2CardCount.textContent = opponent.hand.length;
     return;
@@ -177,19 +182,20 @@ function updateHeaderMsg(type, playerName, opponentName) {
   }
 }
 
-// || CARD EMPTY STATE
-function updateCardEmptyState(activePlayer, centralPile) {
-  const cardEmptyState = isPlayer1(activePlayer.name) ? p1CardEmptyState : p2CardEmptyState;
-  const hand = isPlayer1(activePlayer.name) ? p1Hand : p2Hand;
-
-  if (!activePlayer.hand.length) {
-    cardEmptyState.hidden = false;
-    hand.hidden = true;
-  } else {
+function updatePlayerCardEmptyState(activePlayer) {
+  const hand = isPlayer1(activePlayer) ? p1Hand : p2Hand;
+  const cardEmptyState = isPlayer1(activePlayer) ? p1CardEmptyState : p2CardEmptyState;
+  
+  if (activePlayer.hand.length) {
     cardEmptyState.hidden = true;
     hand.hidden = false;
+  } else {
+    cardEmptyState.hidden = false;
+    hand.hidden = true;
   }
+}
 
+function updateCentralCardEmptyState(centralPile) {
   if (centralPile.length) {
     centralCardEmptyState.hidden = true;
   } else {
@@ -211,6 +217,6 @@ function clearCentralCard() {
   centralCardImg.remove();
 }
 
-function isPlayer1(playerName) {
-  return playerName.includes('1');
+function isPlayer1(activePlayer) {
+  return activePlayer.name.includes('1');
 }
