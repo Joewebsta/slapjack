@@ -10,23 +10,23 @@ body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   background: #eee;
+  background: url('assets/bg-white-3.png');
+  background-size: 100% 100%;
 }
+
 
 header {
-  /* border: 2px solid teal; */
   display: grid;
   grid-template-rows: 104px;
-  align-items: center;
 }
 
+
 header h1 {
-  /* border: 2px solid aquamarine; */
   text-align: center;
   font-size: 40px;
 }
 
 .container {
-  /* border: 2px solid salmon; */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   max-width: 1280px;
@@ -36,7 +36,6 @@ header h1 {
 }
 
 .card {
-  /* border: 2px solid teal; */
   display: grid;
   justify-items: center; 
   grid-template-rows: 406px auto auto;
@@ -53,8 +52,9 @@ header h1 {
 
 .card img {
   height: 406px;
-  min-height: 406px;
-  min-width: 240px;
+  width: 240px;
+  /* min-height: 406px; */
+  /* min-width: 240px; */
   border-radius: 8px;
 }
 
